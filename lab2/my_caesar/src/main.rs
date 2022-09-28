@@ -1,6 +1,5 @@
 use std::io::{stdin, BufRead};
 use std::env;
-use std::char;
 
 const DEFAULT_SHIFT: i32 = 5;
 
@@ -17,7 +16,29 @@ fn main() {
     }
 }
 
+fn convert_nagetive_u32(num: i128) -> u32 {
+    let mut res:i128 = num;
+    while res < 0 {
+        res += 26;
+    }
+    return  res as u32;
+}
 
-fn shift(/*TODO*/) -> /*TODO*/ {
-    
+
+fn shift(shift_by:i32, line:String) -> String {
+    let mut res = String::new();
+    line.chars().for_each(|c| {
+        if c.is_ascii_lowercase() {
+            let new_ascii_val = convert_nagetive_u32(c as i128 - 'a' as i128 + shift_by as i128) % 26 + 'a' as u32;
+            res.push(std::char::from_u32(new_ascii_val).unwrap());
+        }
+        else if c.is_ascii_uppercase() {
+            let new_ascii_val = convert_nagetive_u32(c as i128 - 'A' as i128 + shift_by as i128) % 26 + 'A' as u32;
+            res.push(std::char::from_u32(new_ascii_val).unwrap());
+        }
+        else {
+            res.push(c);
+        }
+    });
+    return res;
 }
