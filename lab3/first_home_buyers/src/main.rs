@@ -1,14 +1,19 @@
-
+#[allow(dead_code)]
+#[derive(Debug)]
 enum Owner {
     Individual(Person),
     Bank(String),
 }
 
+#[allow(dead_code)]
+#[derive(Debug)]
 struct Person {
     name: String, 
     age: u8,
 }
 
+#[allow(dead_code)]
+#[derive(Debug)]
 struct House {
     house_id: i32,
     address: String,
@@ -59,12 +64,12 @@ fn main() {
     // TODO: set the owner of house1 to John
     // This means: pass in a mutable reference to house1
     // and a new Owner::Individual(john) to the buy_house function
-    buy_house(/* TODO */);
+    buy_house(&mut house1, Owner::Individual(john));
 
     // TODO: set the owner of house2 to the Bank of Melbourne
     // This means: pass in a mutable reference to House2
     // and a new Owner::Bank("Bank of Melbourne".to_string()) to the buy_house function
-    buy_house(/* TODO */);
+    buy_house(&mut house2, Owner::Bank("Bank of Melbourne".to_string()));
 
 
     // leave these here :) 
@@ -74,6 +79,6 @@ fn main() {
 }
 
 // TODO: fill out the function parameter types!
-fn buy_house(house: /* TODO */, buyer: /* TODO */) { 
-
+fn buy_house(house: &mut House, buyer: Owner) { 
+    house.owner = buyer;
 }
