@@ -50,51 +50,36 @@ fn main() {
     let instructions = get_instructions_from_stdin();
     // Create a tree struct with a startring light
     let mut tree = Tree{head: Some(Box::new(Light {left: None, right: None, brightness: 0})), total_brightness: 0, total_lights: 1 };
-    let mut light = &mut tree.head;
+    let mut current_light = tree.head.as_mut().unwrap();
     
     // Loop over the instructions 
     for instruct in instructions {
         match instruct {
             Instruction::Set(brightness) => {
-                match light {
-                    Some(current_light) => {
-                        if current_light.brightness > 0 {
-                            tree.total_brightness -= current_light.brightness;
-                            tree.total_brightness += brightness;
-                            current_light.set_brightness(brightness);
-                        }
-                        current_light.set_brightness(brightness);
-                        tree.total_brightness += brightness;
-                    },
-                    None => panic!("Light must exists"),
+                if current_light.brightness > 0 {
+                    tree.total_brightness -= current_light.brightness;
+                    tree.total_brightness += brightness;
+                    current_light.set_brightness(brightness);
                 }
+                current_light.set_brightness(brightness);
+                tree.total_brightness += brightness;
             },
             Instruction::Left => {
-                match light {
-                    Some(current_light) => {
-                        current_light.create_left();
-                        light = &mut current_light.left;
-                        tree.total_lights += 1;
-                    },
-                    None => panic!("Light must exists"),
-                }
+                current_light.create_left();
+                current_light = current_light.left.as_mut().unwrap();
+                tree.total_lights += 1;
             },
             Instruction::Right => {
-                match light {
-                    Some(current_light) => {
-                        current_light.create_right();
-                        light = &mut current_light.right;
-                        tree.total_lights += 1;
-                    },
-                    None => panic!("Light must exists"),
-                }
+                current_light.create_right();
+                current_light = current_light.right.as_mut().unwrap();
+                tree.total_lights += 1;
             },
             Instruction::Reset => {
-                light = &mut tree.head;
+                current_light = tree.head.as_mut().unwrap();
             },
         }
     }
     
-    // println!("{:?}", tree.total_brightness / tree.total_lights);
-    println!("{:?}", tree);
+    println!("{:?}", tree.total_brightness / tree.total_lights);
+    // println!("{:?}", tree);
 }
