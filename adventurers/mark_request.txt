@@ -1,0 +1,67 @@
+# Explorer Mark Request
+
+(You should put an [X] in boxes with completed features.
+Lines starting with ">" are additional comments.)
+
+[ ] There is a player is displayed on the screen.
+
+[ ] The player can be moved by pressing keys
+> You can use the Up/Down/Left/Right keys to move around. (CHANGE THIS LINE IF IT IS NOT CORRECT)
+
+[ ] When the player tries to move off the screen, the screen follows them.
+
+[ ] The viewport does not necessarily always move when the player does.
+
+[ ] There are at least 5 block types (i.e different coloured blocks).
+
+[ ] The layout of the map is specified by a file on the filesystem.
+
+[ ] There is a 'barrier' block. When the player attempts to pass through it, they cannot.
+
+[ ] There is a 'water' block. When the player walks through the 10th block in a row, they die and the game ends.
+
+[ ] There is a 'sign' block. When the player walks over the sign block, a specified message is shown.
+
+[ ] There are 'objects' in my game -- when a player walks over the object, it disappears.
+
+[ ] There is a quests system in my game.
+[ ] The quests system is in a seperate module or crate to the game.
+
+[ ] The first quest (walking over sand blocks) is implemented.
+[ ] The 'q' key shows the progress of my user in this quest.
+
+[ ] The second quest (collecting five objects of one type, then three of another)
+[ ] The 'q' key shows the progress of my user in this quest.
+
+[ ] The third quest (at least two of the three subquests) is implemented.
+[ ] The 'q' key shows the progress of my user in this quest.
+
+[ ] My quests system is designed to make it easy for a developer to add more quests.
+
+## How to Run My Program
+
+Assuming we have taken your crate, without any compilation; what commands will start the game?
+
+> $ cargo run path/to/map.ron first_quest
+
+## Design Excellence
+
+During the assignment we make suggestions for "design excellence". Please list all those
+things you did, and where we can find them in your program.
+
+> - TODO
+
+If you made any other design choices you think demonstrate an equivalent level
+of design excellence, please list them below (including where to find them).
+Note, we suggest you check with a tutor that your design is in fact excellent
+before adding something below:
+
+> - TODO
+
+## Design Limitations
+
+If you made any design decisions which you now regret making; but don't to go back and change them,
+let us know here. You can make up your design marks by acknowledging up to 5 things you would do
+differently now.
+
+> - TODO
