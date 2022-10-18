@@ -3,10 +3,10 @@
 (You should put an [X] in boxes with completed features.
 Lines starting with ">" are additional comments.)
 
-[ ] There is a player is displayed on the screen.
+[X] There is a player is displayed on the screen.
 
-[ ] The player can be moved by pressing keys
-> You can use the Up/Down/Left/Right keys to move around. (CHANGE THIS LINE IF IT IS NOT CORRECT)
+[X] The player can be moved by pressing keys
+> You can use the W/S/A/D keys to move around. (CHANGE THIS LINE IF IT IS NOT CORRECT)
 
 [ ] When the player tries to move off the screen, the screen follows them.
 
