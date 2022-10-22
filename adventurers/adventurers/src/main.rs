@@ -1,48 +1,67 @@
-use termgame::{SimpleEvent, Controller, Game, GameEvent, GameSettings, StyledCharacter, run_game, KeyCode, ViewportLocation};
+use termgame::{SimpleEvent, Controller, Game, GameEvent, GameSettings, StyledCharacter, run_game, KeyCode, ViewportLocation, GameColor, GameStyle};
 use std::error::Error;
 use std::time::Duration;
 // Self-defined modules
 use adventurers::player::Player;
-use adventurers::movement::{Movement, MovementTrait};
+use adventurers::movement::{Coordinate, MovementTrait};
 
 struct MyGame {
     player: Player
+    //TODO: Track the view port position with a coordinate
 }
 
 impl MyGame {
     fn new() -> MyGame {
-        MyGame { player: Player::new() }
+        MyGame { player: Player::default() }
+    }
+
+    fn move_player(&mut self, game: &mut Game, movement: Coordinate) {
+        // TODO: Check if the next block if movable
+        let original_style = game.get_screen_char(self.player.get_x_pos(), self.player.get_y_pos());
+        match original_style {
+            Some(style) => {
+                game.set_screen_char(self.player.get_x_pos(), self.player.get_y_pos(), Some(style.character(' ')));
+            }
+            None => {
+                game.set_screen_char(self.player.get_x_pos(), self.player.get_y_pos(), None);
+            },
+        }
+        self.player.move_by(movement);
+        let next_style = game.get_screen_char(self.player.get_x_pos(), self.player.get_y_pos());
+        match next_style {
+            Some(style) => {
+                game.set_screen_char(self.player.get_x_pos(), self.player.get_y_pos(), Some(style.character(self.player.repr)));
+            }
+            None => {
+                game.set_screen_char(self.player.get_x_pos(), self.player.get_y_pos(), Some(StyledCharacter::from(self.player.repr)));
+            },
+        }
+        // TODO: If the player move out of the map, the viewport should follow
     }
 }
 
 impl Controller for MyGame {
     fn on_start(&mut self, game: &mut Game) {
         // Render the initial position of a player
-        game.set_screen_char(self.player.x, self.player.y, Some(StyledCharacter::from(self.player.repr)));
+        game.set_screen_char(self.player.get_x_pos(), self.player.get_y_pos(), Some(StyledCharacter::from(self.player.repr)));
+        game.set_screen_char(2, 2, Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::Red)))));
+        game.set_screen_char(1, 1, Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::Blue)))));
     }
 
     fn on_event(&mut self, game: &mut Game, event: GameEvent) {
         match event.into() {
             SimpleEvent::Just(KeyCode::Char(ch)) => {
                 if ch == 'w' {
-                    game.set_screen_char(self.player.x, self.player.y, None);
-                    self.player.move_by(Movement::up());
-                    game.set_screen_char(self.player.x, self.player.y, Some(StyledCharacter::from(self.player.repr)));
+                    self.move_player(game, Coordinate::up());
                 }
                 else if ch == 's' {
-                    game.set_screen_char(self.player.x, self.player.y, None);
-                    self.player.move_by(Movement::down());
-                    game.set_screen_char(self.player.x, self.player.y, Some(StyledCharacter::from(self.player.repr)));
+                    self.move_player(game, Coordinate::down());
                 }
                 else if ch == 'a' {
-                    game.set_screen_char(self.player.x, self.player.y, None);
-                    self.player.move_by(Movement::left());
-                    game.set_screen_char(self.player.x, self.player.y, Some(StyledCharacter::from(self.player.repr)));
+                    self.move_player(game, Coordinate::left());
                 }
                 else if ch == 'd' {
-                    game.set_screen_char(self.player.x, self.player.y, None);
-                    self.player.move_by(Movement::right());
-                    game.set_screen_char(self.player.x, self.player.y, Some(StyledCharacter::from(self.player.repr)));
+                    self.move_player(game, Coordinate::right());
                 }
             },
             _ => {}

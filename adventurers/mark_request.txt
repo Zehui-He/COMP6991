@@ -6,7 +6,7 @@ Lines starting with ">" are additional comments.)
 [X] There is a player is displayed on the screen.
 
 [X] The player can be moved by pressing keys
-> You can use the W/S/A/D keys to move around. (CHANGE THIS LINE IF IT IS NOT CORRECT)
+> You can use the W/S/A/D keys to move around.
 
 [ ] When the player tries to move off the screen, the screen follows them.
 

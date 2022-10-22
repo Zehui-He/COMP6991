@@ -1,7 +1,6 @@
 //! This module implements the Blocks object and its behaviour.
 use serde::Deserialize;
 #[derive(Debug, Deserialize)]
-
 /// The Block emun type lists all the possible type of blocks that would
 /// appear in the game.
 pub enum Blocks {
@@ -16,4 +15,3 @@ pub enum Blocks {
     Message(String),
     Sign(String)
 }
-
