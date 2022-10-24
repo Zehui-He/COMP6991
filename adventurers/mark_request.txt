@@ -8,21 +8,21 @@ Lines starting with ">" are additional comments.)
 [X] The player can be moved by pressing keys
 > You can use the W/S/A/D keys to move around.
 
-[ ] When the player tries to move off the screen, the screen follows them.
+[X] When the player tries to move off the screen, the screen follows them.
 
-[ ] The viewport does not necessarily always move when the player does.
+[X] The viewport does not necessarily always move when the player does.
 
-[ ] There are at least 5 block types (i.e different coloured blocks).
+[X] There are at least 5 block types (i.e different coloured blocks).
 
-[ ] The layout of the map is specified by a file on the filesystem.
+[X] The layout of the map is specified by a file on the filesystem.
 
-[ ] There is a 'barrier' block. When the player attempts to pass through it, they cannot.
+[X] There is a 'barrier' block. When the player attempts to pass through it, they cannot.
 
-[ ] There is a 'water' block. When the player walks through the 10th block in a row, they die and the game ends.
+[X] There is a 'water' block. When the player walks through the 10th block in a row, they die and the game ends.
 
-[ ] There is a 'sign' block. When the player walks over the sign block, a specified message is shown.
+[X] There is a 'sign' block. When the player walks over the sign block, a specified message is shown.
 
-[ ] There are 'objects' in my game -- when a player walks over the object, it disappears.
+[X] There are 'objects' in my game -- when a player walks over the object, it disappears.
 
 [ ] There is a quests system in my game.
 [ ] The quests system is in a seperate module or crate to the game.
