@@ -24,8 +24,8 @@ Lines starting with ">" are additional comments.)
 
 [X] There are 'objects' in my game -- when a player walks over the object, it disappears.
 
-[ ] There is a quests system in my game.
-[ ] The quests system is in a seperate module or crate to the game.
+[X] There is a quests system in my game.
+[X] The quests system is in a seperate module or crate to the game.
 
 [ ] The first quest (walking over sand blocks) is implemented.
 [ ] The 'q' key shows the progress of my user in this quest.
@@ -42,14 +42,18 @@ Lines starting with ">" are additional comments.)
 
 Assuming we have taken your crate, without any compilation; what commands will start the game?
 
-> $ cargo run path/to/map.ron first_quest
+UNDER DIRECTORY OF ADVENTURERS
+> $ cargo run -- /../maps/full_game.ron q1
 
 ## Design Excellence
 
 During the assignment we make suggestions for "design excellence". Please list all those
 things you did, and where we can find them in your program.
 
-> - TODO
+1. Put strusts and functions into different module.
+2. Use trait to define the behaviour of movable items such as player. The trait is also designed to be reused for potential object like 'enemy'.
+3. The game would show different error message depending. For example, "The map file cannot be read!" and "The quest cannot be initialized!". This could be found in main.rs.
+4. Provide documentation and test for each module.
 
 If you made any other design choices you think demonstrate an equivalent level
 of design excellence, please list them below (including where to find them).

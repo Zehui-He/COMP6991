@@ -1,5 +1,4 @@
 use quest::QuestStatus;
-
 // self-defined modules
 pub mod quest;
 
@@ -17,12 +16,3 @@ pub trait Quest<Event>: std::fmt::Display + std::fmt::Debug {
     fn reset(&mut self);
 }
 
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        let result = 2 + 2;
-        assert_eq!(result, 4);
-    }
-}

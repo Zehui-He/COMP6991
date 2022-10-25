@@ -1,3 +1,4 @@
+//! This module defines the game structs and behaviours including rendering, update the quest system, how player should behave etc.
 use termgame::{SimpleEvent, Controller, Game, GameEvent, StyledCharacter, KeyCode, ViewportLocation, GameColor, GameStyle, Message};
 use std::collections::HashMap;
 // Self-defined modules
@@ -5,26 +6,42 @@ use crate::player::Player;
 use crate::movement::{Coordinate, MovementTrait};
 use crate::mapparser::read_map;
 use crate::blocks::Blocks;
-use adventurers_quest::quest::PlayerWalkEvent;
+use crate::adventure_quest::initialize_quest;
+use adventurers_quest::quest::SimpleQuest;
 
-pub struct ReadMapError {}
+/// Possible errors that would occur during the initilization of the MyGame object. 
+/// If error occur on reading the map, a ReadMapError should be raised. 
+/// If error occur on making the quest, a QuestError shoudld be raised.
+pub enum GameInitializationError {
+    ReadMapError,
+    QuestError
+}
 
+/// The stuct of MyGame.
 pub struct MyGame {
     player: Player,
-    map: HashMap<(i32, i32), Blocks>
+    map: HashMap<(i32, i32), Blocks>,
+    quest: SimpleQuest
 }
 
 impl MyGame {
-    pub fn new(file_path: String) -> Result<MyGame, ReadMapError> {
-        let mygame_obj = match read_map(file_path) {
-            Ok(res) => Ok(MyGame { 
-                player: Player::default(),
-                map: res
-            }),
-            Err(_) => Err(ReadMapError{}),
+    /// Generate a new MyGame object with two strings. If the MyGame
+    pub fn new(file_path: String, quest_num: &String) -> Result<MyGame, GameInitializationError> {
+        let map = match read_map(file_path) {
+            Ok(res) => res,
+            Err(_) => return Err(GameInitializationError::ReadMapError),
         };
 
-        mygame_obj
+        let quest = match initialize_quest(&quest_num) {
+            Ok(res) => res,
+            Err(_) => return Err(GameInitializationError::QuestError),
+        };
+
+        Ok(MyGame {
+            player: Player::default(),
+            map,
+            quest
+        })
     }
 
     pub fn player_in_viewport(&self, game: &Game) -> bool {
@@ -161,6 +178,26 @@ impl MyGame {
             }
         }
     }
+
+    // pub fn generate_event(&self) -> GameEvent {
+    //     let curr_block = self.get_curr_block();
+    //     match curr_block {
+    //         Some(block) => {
+    //             match block {
+    //                 Blocks::Grass => todo!(),
+    //                 Blocks::Sand => todo!(),
+    //                 Blocks::Rock => todo!(),
+    //                 Blocks::Cinderblock => todo!(),
+    //                 Blocks::Flowerbush => todo!(),
+    //                 Blocks::Barrier => todo!(),
+    //                 Blocks::Water => todo!(),
+    //                 Blocks::Object(_) => todo!(),
+    //                 Blocks::Sign(_) => todo!(),
+    //             }
+    //         },
+    //         None => {}
+    //     }
+    // }
 }
 
 impl Controller for MyGame {
@@ -188,8 +225,10 @@ impl Controller for MyGame {
                     None => {},
                 }
                 
-                // Call function to move player and return an event
+                // Call function to move player
                 self.move_player(game, Some(ch));
+
+                // TODO: return an event to update the state of the quest
             },
             _ => {}
         }
