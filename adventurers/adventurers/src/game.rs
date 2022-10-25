@@ -5,6 +5,7 @@ use crate::player::Player;
 use crate::movement::{Coordinate, MovementTrait};
 use crate::mapparser::read_map;
 use crate::blocks::Blocks;
+use adventurers_quest::quest::PlayerWalkEvent;
 
 pub struct ReadMapError {}
 
@@ -90,7 +91,18 @@ impl MyGame {
         }
     }
 
-    pub fn move_player(&mut self, game: &mut Game, movement: Coordinate) {
+    pub fn move_player(&mut self, game: &mut Game, ch: Option<char>) {
+
+        // Check momvement type
+        let movement = match ch {
+            Some('w') => Coordinate::up(),
+            Some('s') => Coordinate::down(),
+            Some('a') => Coordinate::left(),
+            Some('d') => Coordinate::right(),
+            None => Coordinate::no_move(),
+            _ => return
+        };
+
         // If the next block is barrier, the player should not move
         if self.next_block_is_barrier(&movement) {
             return;
@@ -107,7 +119,7 @@ impl MyGame {
             game.set_viewport(viewport_pos);
         }
 
-        // Find what current block is and do different things
+        // Find what current block is and change the state of player
         let curr_block = self.get_curr_block();
         match curr_block {
             Some(block) => {
@@ -156,7 +168,7 @@ impl Controller for MyGame {
         // Render the map according to the map file
         self.render_map(game);
         // Render the initial position of a player
-        self.move_player(game, Coordinate::no_move());
+        self.move_player(game, None);
     }
 
     fn on_event(&mut self, game: &mut Game, event: GameEvent) {
@@ -175,19 +187,9 @@ impl Controller for MyGame {
                     },
                     None => {},
                 }
-
-                if ch == 'w' {
-                    self.move_player(game, Coordinate::up());
-                }
-                else if ch == 's' {
-                    self.move_player(game, Coordinate::down());
-                }
-                else if ch == 'a' {
-                    self.move_player(game, Coordinate::left());
-                }
-                else if ch == 'd' {
-                    self.move_player(game, Coordinate::right());
-                }
+                
+                // Call function to move player and return an event
+                self.move_player(game, Some(ch));
             },
             _ => {}
         }
