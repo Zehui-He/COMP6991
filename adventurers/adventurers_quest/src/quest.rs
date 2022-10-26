@@ -11,43 +11,6 @@ pub enum QuestStatus {
     Ongoing
 }
 
-/// The Quests structure represents all the quest that is avaliable
-/// in the game. The quests are stored into a vector. When all quests
-/// are completed, the status of the Quest object will be set to 
-/// [QuestStatus::Complete].
-#[derive(Debug)]
-pub struct Quests {
-    pub quests: Vec<Box<dyn SimpleQuestTrait>>,
-    pub status: QuestStatus
-}
-
-impl std::fmt::Display for Quests {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let mut res = String::default();
-        for quest in &self.quests {
-            res += &format!("{}", quest);
-        }
-        write!(f, "{}", res)
-    }
-}
-
-// impl <Target> Quest<GameEvent<Target>> for Quests
-// where Target: std::cmp::PartialEq
-// {
-//     fn register_event(&mut self, event: &GameEvent<Target>) -> QuestStatus {
-//     }
-
-//     fn reset(&mut self) {
-//         todo!()
-//     }
-// }
-
-
-pub trait SimpleQuestTrait: std::fmt::Debug + std::fmt::Display{}
-
-impl <Target> SimpleQuestTrait for SimpleQuest<Target> 
-where Target: std::cmp::PartialEq + std::fmt::Debug  + std::fmt::Display{}
-
 /// This is most simple quest that is avaliable for the game. This kind of
 /// quests only consist of one objective. The Target type must implement 
 /// std::cmp::PartialEq trait because the target of SimpleQuest need to 
@@ -60,10 +23,13 @@ pub struct SimpleQuest<Target: std::cmp::PartialEq> {
     pub completed: bool
 }
 
-impl <Target: std::cmp::PartialEq> SimpleQuest<Target> {
-    fn register_event(&mut self, event: GameEvent<Target>) {
-        if self.is_completed() {
-            return;
+// Impletement the Quest trait for the SimpleQuest structs.
+impl <Target> Quest<MyGameEvent<Target>> for SimpleQuest<Target> 
+where Target: std::cmp::PartialEq + std::fmt::Debug  + std::fmt::Display
+{
+    fn register_event(&mut self, event: &MyGameEvent<Target>) -> QuestStatus {
+        if self.completed {
+            return QuestStatus::Complete;
         }
         if self.target == event.target && self.count == event.count {
             self.repeat -= 1;
@@ -71,10 +37,11 @@ impl <Target: std::cmp::PartialEq> SimpleQuest<Target> {
         if self.repeat == 0 {
             self.completed = true;
         }
+        return QuestStatus::Ongoing;
     }
 
-    fn is_completed(&self) -> bool {
-        self.completed
+    fn reset(&mut self) {
+        todo!()
     }
 }
 
@@ -83,7 +50,7 @@ where Target: std::cmp::PartialEq + std::fmt::Debug  + std::fmt::Display
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut res = String::default();
-        if self.is_completed() {
+        if self.completed {
             res += "\t[✅] ";
         } else {
             res += "\t[  ] ";
@@ -97,13 +64,13 @@ where Target: std::cmp::PartialEq + std::fmt::Debug  + std::fmt::Display
 }
 
 // Struct that is used to tell what the game is happening
-pub struct GameEvent<Target: std::cmp::PartialEq> {
+pub struct MyGameEvent<Target: std::cmp::PartialEq> {
     pub target: Target,
     pub count: u32
 }
 
 pub trait MyGameEventTrait {}
-impl <Target> MyGameEventTrait for GameEvent<Target> 
+impl <Target> MyGameEventTrait for MyGameEvent<Target> 
 where Target: std::cmp::PartialEq
 {}
 
