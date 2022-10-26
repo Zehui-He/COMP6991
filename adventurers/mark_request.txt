@@ -30,10 +30,10 @@ Lines starting with ">" are additional comments.)
 [X] The first quest (walking over sand blocks) is implemented.
 [ ] The 'q' key shows the progress of my user in this quest.
 
-[X] The second quest (collecting five objects of one type, then three of another)
+[ ] The second quest (collecting five objects of one type, then three of another)
 [ ] The 'q' key shows the progress of my user in this quest.
 
-[X] The third quest (at least two of the three subquests) is implemented.
+[ ] The third quest (at least two of the three subquests) is implemented.
 [ ] The 'q' key shows the progress of my user in this quest.
 
 [ ] My quests system is designed to make it easy for a developer to add more quests.

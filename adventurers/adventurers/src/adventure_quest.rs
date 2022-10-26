@@ -1,6 +1,12 @@
-use adventurers_quest::quest::{SimpleQuest, QuestStatus};
+use adventurers_quest::quest::{SimpleQuest, Quests, QuestStatus, SimpleQuestTrait, GameEvent};
 use crate::{game::GameInitializationError, blocks::Blocks};
 
+
+pub trait MyGameEventTrait {}
+
+impl <Target> MyGameEventTrait for GameEvent<Target> 
+where Target: std::cmp::PartialEq
+{}
 
 enum GiveQuest {
     Q1,

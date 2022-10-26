@@ -1,5 +1,4 @@
 //! This module defines the game structs and behaviours including rendering, update the quest system, how player should behave etc.
-use adventurers_quest::quest::MyGameEvent;
 use termgame::{SimpleEvent, Controller, Game, GameEvent, StyledCharacter, KeyCode, ViewportLocation, GameColor, GameStyle, Message};
 use std::collections::HashMap;
 // Self-defined modules
@@ -7,8 +6,8 @@ use crate::player::Player;
 use crate::movement::{Coordinate, MovementTrait};
 use crate::mapparser::read_map;
 use crate::blocks::Blocks;
-use crate::adventure_quest::initialize_quest;
-use adventurers_quest::Quest;
+use crate::adventure_quest::{initialize_quest};
+use adventurers_quest::quest::{Quests, GameEvent as MyEvent, MyGameEventTrait};
 
 /// Possible errors that would occur during the initilization of the MyGame object. 
 /// If error occur on reading the map, a ReadMapError should be raised. 
@@ -22,7 +21,7 @@ pub enum GameInitializationError {
 pub struct MyGame {
     player: Player,
     map: HashMap<(i32, i32), Blocks>,
-    quest: Vec<dyn Quest<>>
+    quest: Quests
 }
 
 impl MyGame {
@@ -180,19 +179,19 @@ impl MyGame {
         }
     }
 
-    // pub fn generate_char_event(&self, ch:char) -> MyEvent<char> {
-    //     MyEvent::<char> { target: ch, count: 1 }
-    // }
+    pub fn generate_char_event(&self, ch:char) -> MyEvent<char> {
+        MyEvent::<char> { target: ch, count: 1 }
+    }
 
-    // pub fn generate_block_event(&mut self, curr_block: Blocks) -> MyEvent<Blocks> {
-    //     if self.player.prev_block == Some(curr_block.clone()) {
-    //         self.player.continue_steps += 1;
-    //     }
-    //     else {
-    //         self.player.continue_steps = 1;
-    //     }
-    //     MyEvent::<Blocks> { target: curr_block, count: 1 }
-    // }
+    pub fn generate_block_event(&mut self, curr_block: Blocks) -> MyEvent<Blocks> {
+        if self.player.prev_block == Some(curr_block.clone()) {
+            self.player.continue_steps += 1;
+        }
+        else {
+            self.player.continue_steps = 1;
+        }
+        MyEvent::<Blocks> { target: curr_block, count: 1 }
+    }
 }
 
 impl Controller for MyGame {
@@ -229,7 +228,7 @@ impl Controller for MyGame {
                 self.move_player(game, Some(ch));
 
                 // TODO: generate an event to update the state of the quest
-                // let curr_block = self.get_curr_block();
+                let curr_block = self.get_curr_block();
                 // let event:Box<dyn MyGameEventTrait> = match curr_block {
                 //     Some(block) => {
                 //         match block {
