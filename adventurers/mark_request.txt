@@ -27,7 +27,7 @@ Lines starting with ">" are additional comments.)
 [X] There is a quests system in my game.
 [X] The quests system is in a seperate module or crate to the game.
 
-[ ] The first quest (walking over sand blocks) is implemented.
+[X] The first quest (walking over sand blocks) is implemented.
 [ ] The 'q' key shows the progress of my user in this quest.
 
 [ ] The second quest (collecting five objects of one type, then three of another)

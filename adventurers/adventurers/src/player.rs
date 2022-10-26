@@ -1,6 +1,6 @@
 //! This module implements the Player object and its behaviour.
 use termgame::{Game, Message};
-use crate::movement::{MovementTrait, Coordinate};
+use crate::{movement::{MovementTrait, Coordinate}, blocks::Blocks};
 
 
 /// The Player struct is used to represent a player and its state in the game.
@@ -10,7 +10,9 @@ pub struct Player {
     position: Coordinate,
     pub repr: char,
     pub in_water: bool,
-    pub steps_in_water: u8
+    pub steps_in_water: u8,
+    pub prev_block: Option<Blocks>,
+    pub continue_steps: u8,
 }
 
 /// This function would defaultly construct a player object with coordinaation
@@ -34,7 +36,9 @@ impl Player {
             position: Coordinate { x: 3, y: 3 },
             repr: '♟',
             in_water: false,
-            steps_in_water: 0
+            steps_in_water: 0,
+            prev_block: None,
+            continue_steps: 0,
         }
     }
     

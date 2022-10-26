@@ -6,8 +6,8 @@ use crate::player::Player;
 use crate::movement::{Coordinate, MovementTrait};
 use crate::mapparser::read_map;
 use crate::blocks::Blocks;
-use crate::adventure_quest::initialize_quest;
-use adventurers_quest::quest::SimpleQuest;
+use crate::adventure_quest::{initialize_quest};
+use adventurers_quest::quest::{Quests, GameEvent as MyEvent, MyGameEventTrait};
 
 /// Possible errors that would occur during the initilization of the MyGame object. 
 /// If error occur on reading the map, a ReadMapError should be raised. 
@@ -21,7 +21,7 @@ pub enum GameInitializationError {
 pub struct MyGame {
     player: Player,
     map: HashMap<(i32, i32), Blocks>,
-    quest: SimpleQuest
+    quest: Quests
 }
 
 impl MyGame {
@@ -166,38 +166,32 @@ impl MyGame {
     pub fn render_map(&self, game: &mut Game) {
         for ((x,y), block) in &self.map {
             match block {
-                Blocks::Grass => {game.set_screen_char(x.clone(), y.clone(), Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::Green)))));},
-                Blocks::Sand => {game.set_screen_char(x.clone(), y.clone(), Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::Yellow)))));},
-                Blocks::Rock => {game.set_screen_char(x.clone(), y.clone(), Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::Gray)))));},
-                Blocks::Cinderblock => {game.set_screen_char(x.clone(), y.clone(), Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::LightRed)))));},
-                Blocks::Flowerbush => {game.set_screen_char(x.clone(), y.clone(), Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::Magenta)))));},
-                Blocks::Barrier => {game.set_screen_char(x.clone(), y.clone(), Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::White)))));},
-                Blocks::Water => {game.set_screen_char(x.clone(), y.clone(), Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::Blue)))));},
-                Blocks::Object(character) => {game.set_screen_char(x.clone(), y.clone(), Some(StyledCharacter::from(character.clone()).style(GameStyle::new().background_color(Some(GameColor::Black)))));},
-                Blocks::Sign(_) => {game.set_screen_char(x.clone(), y.clone(), Some(StyledCharacter::from('💬').style(GameStyle::new().background_color(Some(GameColor::Black)))));},
+                Blocks::Grass => {game.set_screen_char(*x, *y, Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::Green)))));},
+                Blocks::Sand => {game.set_screen_char(*x, *y, Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::Yellow)))));},
+                Blocks::Rock => {game.set_screen_char(*x, *y, Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::Gray)))));},
+                Blocks::Cinderblock => {game.set_screen_char(*x, *y, Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::LightRed)))));},
+                Blocks::Flowerbush => {game.set_screen_char(*x, *y, Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::Magenta)))));},
+                Blocks::Barrier => {game.set_screen_char(*x, *y, Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::White)))));},
+                Blocks::Water => {game.set_screen_char(*x, *y, Some(StyledCharacter::from(' ').style(GameStyle::new().background_color(Some(GameColor::Blue)))));},
+                Blocks::Object(character) => {game.set_screen_char(*x, *y, Some(StyledCharacter::from(character.clone()).style(GameStyle::new().background_color(Some(GameColor::Black)))));},
+                Blocks::Sign(_) => {game.set_screen_char(*x, *y, Some(StyledCharacter::from('💬').style(GameStyle::new().background_color(Some(GameColor::Black)))));},
             }
         }
     }
 
-    // pub fn generate_event(&self) -> GameEvent {
-    //     let curr_block = self.get_curr_block();
-    //     match curr_block {
-    //         Some(block) => {
-    //             match block {
-    //                 Blocks::Grass => todo!(),
-    //                 Blocks::Sand => todo!(),
-    //                 Blocks::Rock => todo!(),
-    //                 Blocks::Cinderblock => todo!(),
-    //                 Blocks::Flowerbush => todo!(),
-    //                 Blocks::Barrier => todo!(),
-    //                 Blocks::Water => todo!(),
-    //                 Blocks::Object(_) => todo!(),
-    //                 Blocks::Sign(_) => todo!(),
-    //             }
-    //         },
-    //         None => {}
-    //     }
-    // }
+    pub fn generate_char_event(&self, ch:char) -> MyEvent<char> {
+        MyEvent::<char> { target: ch, count: 1 }
+    }
+
+    pub fn generate_block_event(&mut self, curr_block: Blocks) -> MyEvent<Blocks> {
+        if self.player.prev_block == Some(curr_block.clone()) {
+            self.player.continue_steps += 1;
+        }
+        else {
+            self.player.continue_steps = 1;
+        }
+        MyEvent::<Blocks> { target: curr_block, count: 1 }
+    }
 }
 
 impl Controller for MyGame {
@@ -224,11 +218,33 @@ impl Controller for MyGame {
                     },
                     None => {},
                 }
+
+                // Show quest if 'q' is pressed
+                if ch == 'q' {
+                    game.set_message(Some(Message{ title: Some("Quest".to_string()), text: format!("{}", self.quest).to_string() }));
+                }
                 
                 // Call function to move player
                 self.move_player(game, Some(ch));
 
-                // TODO: return an event to update the state of the quest
+                // TODO: generate an event to update the state of the quest
+                let curr_block = self.get_curr_block();
+                // let event:Box<dyn MyGameEventTrait> = match curr_block {
+                //     Some(block) => {
+                //         match block {
+                //             Blocks::Grass => Box::from(self.generate_block_event(block.clone())),
+                //             Blocks::Sand => todo!(),
+                //             Blocks::Rock => todo!(),
+                //             Blocks::Cinderblock => todo!(),
+                //             Blocks::Flowerbush => todo!(),
+                //             Blocks::Barrier => todo!(),
+                //             Blocks::Water => todo!(),
+                //             Blocks::Object(target) => Box::from(self.generate_char_event(target.clone())),
+                //             Blocks::Sign(_) => todo!(),
+                //         }
+                //     },
+                //     None => todo!(),
+                // };
             },
             _ => {}
         }

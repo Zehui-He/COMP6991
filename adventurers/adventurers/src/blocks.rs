@@ -14,3 +14,17 @@ pub enum Blocks {
     Object(char),
     Sign(String)
 }
+
+impl std::fmt::Display for Blocks {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Blocks::Grass => write!(f, "Grass block"),
+            Blocks::Sand => write!(f, "Sand block"),
+            Blocks::Rock => write!(f, "Rock block"),
+            Blocks::Cinderblock => write!(f, "Cinder block"),
+            Blocks::Flowerbush => write!(f, "Flower bush"),
+            Blocks::Water => write!(f, "Water block"),
+            _ => write!(f, "Other block"),
+        }
+    }
+}
