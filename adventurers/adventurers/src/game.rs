@@ -1,4 +1,5 @@
 //! This module defines the game structs and behaviours including rendering, update the quest system, how player should behave etc.
+use adventurers_quest::Quest;
 use termgame::{SimpleEvent, Controller, Game, GameEvent, StyledCharacter, KeyCode, ViewportLocation, GameColor, GameStyle, Message};
 use std::collections::HashMap;
 // Self-defined modules
@@ -6,8 +7,7 @@ use crate::player::Player;
 use crate::movement::{Coordinate, MovementTrait};
 use crate::mapparser::read_map;
 use crate::blocks::Blocks;
-use crate::adventure_quest::{initialize_quest};
-use adventurers_quest::quest::{Quests, GameEvent as MyEvent, MyGameEventTrait};
+use crate::adventure_quest::{initialize_quest,GameEvent as MyGameEvent};
 
 /// Possible errors that would occur during the initilization of the MyGame object. 
 /// If error occur on reading the map, a ReadMapError should be raised. 
@@ -21,7 +21,7 @@ pub enum GameInitializationError {
 pub struct MyGame {
     player: Player,
     map: HashMap<(i32, i32), Blocks>,
-    quest: Quests
+    quest:  Box<dyn Quest<MyGameEvent>>
 }
 
 impl MyGame {
@@ -179,18 +179,18 @@ impl MyGame {
         }
     }
 
-    pub fn generate_char_event(&self, ch:char) -> MyEvent<char> {
-        MyEvent::<char> { target: ch, count: 1 }
+    pub fn generate_char_event(&self, ch:char) -> MyGameEvent {
+        MyGameEvent::CollectEvent { target: ch }
     }
 
-    pub fn generate_block_event(&mut self, curr_block: Blocks) -> MyEvent<Blocks> {
+    pub fn generate_block_event(&mut self, curr_block: Blocks) -> MyGameEvent {
         if self.player.prev_block == Some(curr_block.clone()) {
             self.player.continue_steps += 1;
         }
         else {
             self.player.continue_steps = 1;
         }
-        MyEvent::<Blocks> { target: curr_block, count: 1 }
+        MyGameEvent::BlockEvent { target: curr_block, count: self.player.continue_steps }
     }
 }
 
@@ -209,7 +209,7 @@ impl Controller for MyGame {
                 // The game ends if it say the player is dead.
                 match game.get_message() {
                     Some(msg) => {
-                        if msg.text == "You are drowned.".to_string() {
+                        if msg.text == "You are drowned.".to_string() || msg.text == "YOU WIN!!!".to_string() {
                             game.end_game();
                         }
                         else {
@@ -222,29 +222,45 @@ impl Controller for MyGame {
                 // Show quest if 'q' is pressed
                 if ch == 'q' {
                     game.set_message(Some(Message{ title: Some("Quest".to_string()), text: format!("{}", self.quest).to_string() }));
+                    return;
+                }
+
+                // Record the prev step of player
+                match self.get_curr_block() {
+                    Some(block) => {
+                        self.player.prev_block = Some(block.clone())
+                    },
+                    None => self.player.prev_block = None,
                 }
                 
                 // Call function to move player
                 self.move_player(game, Some(ch));
 
-                // TODO: generate an event to update the state of the quest
-                let curr_block = self.get_curr_block();
-                // let event:Box<dyn MyGameEventTrait> = match curr_block {
-                //     Some(block) => {
-                //         match block {
-                //             Blocks::Grass => Box::from(self.generate_block_event(block.clone())),
-                //             Blocks::Sand => todo!(),
-                //             Blocks::Rock => todo!(),
-                //             Blocks::Cinderblock => todo!(),
-                //             Blocks::Flowerbush => todo!(),
-                //             Blocks::Barrier => todo!(),
-                //             Blocks::Water => todo!(),
-                //             Blocks::Object(target) => Box::from(self.generate_char_event(target.clone())),
-                //             Blocks::Sign(_) => todo!(),
-                //         }
-                //     },
-                //     None => todo!(),
-                // };
+                // Generate an event to update the state of the quest
+                let curr_block = self.get_curr_block().unwrap_or(&Blocks::Barrier).clone();
+                let event = match curr_block {
+                    Blocks::Object(target) => {
+                        Box::from(self.generate_char_event(target.clone()))
+                    },
+                    _ => Box::from(self.generate_block_event(curr_block.clone())),
+                };
+                
+                match self.quest.register_event(&event) {
+                    adventurers_quest::quest::QuestStatus::Complete => {
+                        game.set_message(Some(Message{ title: Some("Message".to_string()), text:"YOU WIN!!!".to_string() }));
+                    },
+                    adventurers_quest::quest::QuestStatus::Ongoing => {},
+                }
+                
+                // Remove the object block after collection
+                match curr_block {
+                    Blocks::Object(_) => {
+                        self.map.remove(&(self.player.get_x_pos(), self.player.get_y_pos()));
+                    },
+                    _=> {}
+                }
+
+
             },
             _ => {}
         }

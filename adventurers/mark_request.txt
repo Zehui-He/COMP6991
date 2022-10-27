@@ -6,7 +6,7 @@ Lines starting with ">" are additional comments.)
 [X] There is a player is displayed on the screen.
 
 [X] The player can be moved by pressing keys
-> You can use the W/S/A/D keys to move around.
+> You can use the W/S/A/D keys to move around. You can press Q to toggle the quest menu.
 
 [X] When the player tries to move off the screen, the screen follows them.
 
@@ -28,13 +28,13 @@ Lines starting with ">" are additional comments.)
 [X] The quests system is in a seperate module or crate to the game.
 
 [X] The first quest (walking over sand blocks) is implemented.
-[ ] The 'q' key shows the progress of my user in this quest.
+[X] The 'q' key shows the progress of my user in this quest.
 
-[ ] The second quest (collecting five objects of one type, then three of another)
-[ ] The 'q' key shows the progress of my user in this quest.
+[X] The second quest (collecting five objects of one type, then three of another)
+[X] The 'q' key shows the progress of my user in this quest.
 
-[ ] The third quest (at least two of the three subquests) is implemented.
-[ ] The 'q' key shows the progress of my user in this quest.
+[X] The third quest (at least two of the three subquests) is implemented.
+[X] The 'q' key shows the progress of my user in this quest.
 
 [ ] My quests system is designed to make it easy for a developer to add more quests.
 
@@ -68,4 +68,5 @@ If you made any design decisions which you now regret making; but don't to go ba
 let us know here. You can make up your design marks by acknowledging up to 5 things you would do
 differently now.
 
-> - TODO
+The quest system was not able to seperate with the game. Only a trait is defined in the 'adventurers_quest' crate. I tried to use generic to achieve
+the seperation but Rust warned me that I am not allowed to implement external(not defined in current crate) trait with external structs.

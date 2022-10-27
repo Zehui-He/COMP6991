@@ -33,27 +33,33 @@ pub fn read_map(file_path: String) -> Result<HashMap<(i32, i32), Blocks>, Spanne
     from_reader(f)
 }
 
-#[test]
-fn test_exist_map() {
-    let mut correct_map = HashMap::new();
-    correct_map.insert((0,0), Blocks::Barrier);
-    correct_map.insert((0,1), Blocks::Flowerbush);
-    correct_map.insert((0,2), Blocks::Water);
-    correct_map.insert((0,3), Blocks::Grass);
-
-    let test_file = String::from("/../maps/test.ron");
-    let map = read_map(test_file).ok().unwrap();
-    assert_eq!(map, correct_map);
-}
-
-#[test]
-fn test_unsupport_map() {
-    let unsupport_file = String::from("/../maps/bad_data.ron");
-    let _err = read_map(unsupport_file).unwrap_err();
-}
-
-#[test]
-fn test_non_exist_map() {
-    let non_exist_file = String::from("/../maps/hello.ron");
-    let _err = read_map(non_exist_file).unwrap_err();
+#[cfg(test)]
+mod test {
+    use std::collections::HashMap;
+    use crate::mapparser::read_map;
+    use crate::blocks::Blocks;
+    #[test]
+    fn test_exist_map() {
+        let mut correct_map = HashMap::new();
+        correct_map.insert((0,0), Blocks::Barrier);
+        correct_map.insert((0,1), Blocks::Flowerbush);
+        correct_map.insert((0,2), Blocks::Water);
+        correct_map.insert((0,3), Blocks::Grass);
+    
+        let test_file = String::from("/../maps/test.ron");
+        let map = read_map(test_file).ok().unwrap();
+        assert_eq!(map, correct_map);
+    }
+    
+    #[test]
+    fn test_unsupport_map() {
+        let unsupport_file = String::from("/../maps/bad_data.ron");
+        let _err = read_map(unsupport_file).unwrap_err();
+    }
+    
+    #[test]
+    fn test_non_exist_map() {
+        let non_exist_file = String::from("/../maps/hello.ron");
+        let _err = read_map(non_exist_file).unwrap_err();
+    }
 }
