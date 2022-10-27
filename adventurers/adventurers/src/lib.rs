@@ -1,6 +1,6 @@
-pub mod player;
-pub mod movement;
-pub mod blocks;
-pub mod mapparser;
-pub mod game;
 pub mod adventure_quest;
+pub mod blocks;
+pub mod game;
+pub mod mapparser;
+pub mod movement;
+pub mod player;

@@ -4,5 +4,5 @@ pub enum QuestStatus {
     /// The quest is completed
     Complete,
     /// The quest is not completed
-    Ongoing
+    Ongoing,
 }

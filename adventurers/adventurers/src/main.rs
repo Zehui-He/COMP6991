@@ -1,9 +1,8 @@
+use adventurers::game::GameInitializationError;
 use adventurers::game::MyGame;
-use termgame::{SimpleEvent, GameSettings, run_game, KeyCode};
 use std::error::Error;
 use std::time::Duration;
-use adventurers::game::GameInitializationError;
-
+use termgame::{run_game, GameSettings, KeyCode, SimpleEvent};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = std::env::args().collect();
@@ -19,11 +18,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         Err(GameInitializationError::ReadMapError) => {
             println!("The map file cannot be read!");
             std::process::exit(0);
-        },
+        }
         Err(GameInitializationError::QuestError) => {
             println!("The quest {} cannot be initialized!", quest_num);
             std::process::exit(0);
-        },
+        }
     };
 
     run_game(
@@ -31,7 +30,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         GameSettings::new()
             // The below are the defaults, but shown so you can edit them.
             .tick_duration(Duration::from_millis(50))
-            .quit_event(Some(SimpleEvent::WithControl(KeyCode::Char('c')).into()))
+            .quit_event(Some(SimpleEvent::WithControl(KeyCode::Char('c')).into())),
     )?;
 
     println!("Game Ended!");

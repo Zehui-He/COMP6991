@@ -1,6 +1,6 @@
 //! This module implements the enum type of blocks.
 use serde::Deserialize;
-#[derive(Debug, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
 /// The Block emun type lists all the possible type of blocks that would
 /// appear in the game.
 pub enum Blocks {
@@ -12,7 +12,7 @@ pub enum Blocks {
     Barrier,
     Water,
     Object(char),
-    Sign(String)
+    Sign(String),
 }
 
 impl std::fmt::Display for Blocks {
