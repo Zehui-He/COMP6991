@@ -1,0 +1,59 @@
+# IRIS Mark Request
+
+(You should put an [X] in boxes with completed features.
+Lines starting with ">" are additional comments.)
+
+[ ] The server can be started with the command `cargo run 127.0.0.1 6991`.
+
+[ ] When a 'NICK' message is sent, the server stores the relevant information from it.
+[ ] When a 'USER' message is sent after a 'NICK', the server replies with a RPL_WELCOME.
+[ ] The RPL_WELCOME contains the user's full name from the 'USER' message
+[ ] Non-'NICK'/'USER' messages are ignored until the user has sent both.
+
+[ ] When a user sends a 'PING' message, an appropriate 'PONG' is sent back.
+
+[ ] When a user sends a 'QUIT' message, their connection is dropped.
+
+[ ] When a user sends a 'PRIVMSG' message to themselves, it is sent back to them.
+
+[ ] Multiple users can join the same server.
+
+[ ] Messages can be sent from one user to another.
+
+[ ] A user can 'JOIN' a channel.
+
+[ ] A user can 'PART' a channel.
+
+[ ] All relevant messages sent by users inside a channel are sent to every other member of that channel.
+
+[ ] My design never stores messages, and deletes users as soon as they have left the server.
+
+[ ] My design never stores messages, and deletes users as soon as they have left the server.
+
+[ ] It is possible to set reminders, using the following command (change this if you'd like)
+> PRIVMSG remindbot :10s tfpk :Remind me of something.
+
+[ ] I have provided an "example" plugin, which explains how somebody
+    else can interface with my plugin system.
+
+## Design Excellence
+
+During the assignment we make suggestions for "design excellence". Please list all those
+things you did, and where we can find them in your program.
+
+> - TODO
+
+If you made any other design choices you think demonstrate an equivalent level
+of design excellence, please list them below (including where to find them).
+Note, we suggest you check with a tutor that your design is in fact excellent
+before adding something below:
+
+> - TODO
+
+## Design Limitations
+
+If you made any design decisions which you now regret making; but don't to go back and change them,
+let us know here. You can make up your design marks by acknowledging up to 5 things you would do
+differently now.
+
+> - TODO
