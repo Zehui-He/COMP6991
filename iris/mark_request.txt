@@ -3,16 +3,17 @@
 (You should put an [X] in boxes with completed features.
 Lines starting with ">" are additional comments.)
 
-[ ] The server can be started with the command `cargo run 127.0.0.1 6991`.
+[X] The server can be started with the command `cargo run 127.0.0.1 6991`.
 
-[ ] When a 'NICK' message is sent, the server stores the relevant information from it.
-[ ] When a 'USER' message is sent after a 'NICK', the server replies with a RPL_WELCOME.
-[ ] The RPL_WELCOME contains the user's full name from the 'USER' message
+[X] When a 'NICK' message is sent, the server stores the relevant information from it.
+    > A message would pop up to tell the users what nickname thry have set to.
+[X] When a 'USER' message is sent after a 'NICK', the server replies with a RPL_WELCOME.
+[X] The RPL_WELCOME contains the user's full name from the 'USER' message
 [ ] Non-'NICK'/'USER' messages are ignored until the user has sent both.
 
-[ ] When a user sends a 'PING' message, an appropriate 'PONG' is sent back.
+[X] When a user sends a 'PING' message, an appropriate 'PONG' is sent back.
 
-[ ] When a user sends a 'QUIT' message, their connection is dropped.
+[X] When a user sends a 'QUIT' message, their connection is dropped.
 
 [ ] When a user sends a 'PRIVMSG' message to themselves, it is sent back to them.
 
