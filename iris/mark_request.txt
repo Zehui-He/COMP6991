@@ -9,27 +9,25 @@ Lines starting with ">" are additional comments.)
     > A message would pop up to tell the users what nickname thry have set to.
 [X] When a 'USER' message is sent after a 'NICK', the server replies with a RPL_WELCOME.
 [X] The RPL_WELCOME contains the user's full name from the 'USER' message
-[ ] Non-'NICK'/'USER' messages are ignored until the user has sent both.
+[X] Non-'NICK'/'USER' messages are ignored until the user has sent both.
 
 [X] When a user sends a 'PING' message, an appropriate 'PONG' is sent back.
 
-[X] When a user sends a 'QUIT' message, their connection is dropped.
+[ ] When a user sends a 'QUIT' message, their connection is dropped.
 
-[ ] When a user sends a 'PRIVMSG' message to themselves, it is sent back to them.
+[X] When a user sends a 'PRIVMSG' message to themselves, it is sent back to them.
 
-[ ] Multiple users can join the same server.
+[X] Multiple users can join the same server.
 
-[ ] Messages can be sent from one user to another.
+[X] Messages can be sent from one user to another.
 
-[ ] A user can 'JOIN' a channel.
+[X] A user can 'JOIN' a channel.
 
-[ ] A user can 'PART' a channel.
+[X] A user can 'PART' a channel.
 
 [ ] All relevant messages sent by users inside a channel are sent to every other member of that channel.
 
-[ ] My design never stores messages, and deletes users as soon as they have left the server.
-
-[ ] My design never stores messages, and deletes users as soon as they have left the server.
+[X] My design never stores messages, and deletes users as soon as they have left the server.
 
 [ ] It is possible to set reminders, using the following command (change this if you'd like)
 > PRIVMSG remindbot :10s tfpk :Remind me of something.
