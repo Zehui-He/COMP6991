@@ -1,10 +1,16 @@
 use clap::Parser;
+use iris_lib::handler::parsed_msg_handler;
 use iris_lib::{
     connect::{ConnectionError, ConnectionManager},
-    types::{SERVER_NAME, UnparsedMessage, Nick, ParsedMessage, Message}, user::User, handler::parse_error_handler,
+    handler::parse_error_handler,
+    types::{Message, Nick, ParsedMessage, UnparsedMessage, SERVER_NAME},
+    user::User,
 };
-use std::{net::IpAddr, sync::{self, Arc, Mutex}, collections::HashMap};
-use iris_lib::handler::parsed_msg_handler;
+use std::{
+    collections::HashMap,
+    net::IpAddr,
+    sync::{self, Arc, Mutex},
+};
 
 #[derive(Parser)]
 struct Arguments {
@@ -19,9 +25,7 @@ fn main() {
     let arguments = Arguments::parse();
     println!(
         "Launching {} at {}:{}",
-        SERVER_NAME,
-        arguments.ip_address,
-        arguments.port
+        SERVER_NAME, arguments.ip_address, arguments.port
     );
 
     // Vec to store all of the users
@@ -42,13 +46,14 @@ fn main() {
                 match receiver.recv() {
                     Ok((parsed_msg, id)) => {
                         // Error may occur during replying
-                        match parsed_msg_handler(parsed_msg, &mut users, &mut channels, id.clone()) {
+                        match parsed_msg_handler(parsed_msg, &mut users, &mut channels, id.clone())
+                        {
                             Ok(_) => {
                                 println!("I received a message and send a reply!");
-                            },
+                            }
                             Err(err) => {
                                 parse_error_handler(err, &mut users, id);
-                            },
+                            }
                         }
                     }
                     Err(_) => {
@@ -60,7 +65,7 @@ fn main() {
     }
 
     let mut connection_manager = ConnectionManager::launch(arguments.ip_address, arguments.port);
-    
+
     // Listening thread
     loop {
         // This function call will block until a new client connects!
@@ -90,7 +95,9 @@ fn main() {
                     println!("Waiting for message...");
                     let message = match conn_read.read_message() {
                         Ok(message) => message,
-                        Err(ConnectionError::ConnectionLost | ConnectionError::ConnectionClosed) => {
+                        Err(
+                            ConnectionError::ConnectionLost | ConnectionError::ConnectionClosed,
+                        ) => {
                             println!("Lost connection.");
                             break;
                         }
@@ -99,7 +106,7 @@ fn main() {
                             continue;
                         }
                     };
-        
+
                     println!("Received message: {message}");
 
                     // If the sender doesn't have a nick name, use id as nick name
@@ -114,7 +121,7 @@ fn main() {
                     }
 
                     // Process the incoming message with parsing
-                    let processed_msg = ParsedMessage::try_from(UnparsedMessage{
+                    let processed_msg = ParsedMessage::try_from(UnparsedMessage {
                         sender_nick: Nick(sender_nick),
                         message: &message,
                     });
@@ -122,14 +129,11 @@ fn main() {
                     match processed_msg {
                         Ok(processed_msg) => {
                             // Set quit signal for thread
-                            match processed_msg.message {
-                                Message::Quit(_) => {
-                                    user_quited = true;
-                                },
-                                _ => {}
+                            if let Message::Quit(_) = processed_msg.message {
+                                user_quited = true;
                             }
                             sender.send((processed_msg, conn_read.id())).unwrap();
-                        },
+                        }
                         Err(err) => parse_error_handler(err, &mut users, conn_read.id()),
                     }
                 }

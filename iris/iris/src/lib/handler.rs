@@ -1,31 +1,37 @@
-use std::{sync::{Arc, Mutex}, collections::HashMap};
+use std::{
+    collections::HashMap,
+    sync::{Arc, Mutex},
+};
 
-use crate::{types::{ParsedMessage, ErrorType, NickMsg, UserMsg, Nick, Reply, WelcomeReply, QuitMsg, QuitReply, PrivMsg, Target, PrivReply, Message, JoinMsg, PartMsg, PartReply, JoinReply, Channel}, user::User};
+use crate::{
+    types::{
+        Channel, ErrorType, JoinMsg, JoinReply, Message, Nick, NickMsg, ParsedMessage, PartMsg,
+        PartReply, PrivMsg, PrivReply, QuitMsg, QuitReply, Reply, Target, UserMsg, WelcomeReply,
+    },
+    user::User,
+};
 
 /// Process the parsed message
-pub fn parsed_msg_handler(parsed_msg: ParsedMessage, users: &mut Arc<Mutex<Vec<User>>>, channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>, id: String) -> Result<(), ErrorType> {
+pub fn parsed_msg_handler(
+    parsed_msg: ParsedMessage,
+    users: &mut Arc<Mutex<Vec<User>>>,
+    channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>,
+    id: String,
+) -> Result<(), ErrorType> {
     match parsed_msg.message {
-        Message::Nick(nickmsg) => Ok({
-           nick_msg_handler(nickmsg, users, id);
-        }),
-        Message::User(usermsg) => Ok({
+        Message::Nick(nickmsg) => nick_msg_handler(nickmsg, users, id),
+        Message::User(usermsg) => {
             user_msg_handler(usermsg, users, id);
-        }),
-        Message::PrivMsg(privmsg) => {
-            priv_msg_handler(privmsg, users, channels, id)
+            Ok(())
         },
-        Message::Ping(message) => {
-            ping_msg_handler(message, users, id)
-        },
-        Message::Join(joinmsg) => {
-            join_msg_handler(joinmsg, users, channels, id)
-        },
-        Message::Part(partmsg) => {
-            part_msg_handler(partmsg, users, channels, id)
-        },
-        Message::Quit(quitmsg) => Ok({
+        Message::PrivMsg(privmsg) => priv_msg_handler(privmsg, users, channels, id),
+        Message::Ping(message) => ping_msg_handler(message, users, id),
+        Message::Join(joinmsg) => join_msg_handler(joinmsg, users, channels, id),
+        Message::Part(partmsg) => part_msg_handler(partmsg, users, channels, id),
+        Message::Quit(quitmsg) => {
             quit_msg_handler(quitmsg, users, channels, id);
-        }),
+            Ok(())
+        },
     }
 }
 
@@ -45,17 +51,36 @@ pub fn parse_error_handler(err: ErrorType, users: &mut Arc<Mutex<Vec<User>>>, id
     let _ = user.get_conn_write().write_message(message);
 }
 
-// Nick name may collide
-fn nick_msg_handler(nickmsg: NickMsg, users: &mut Arc<Mutex<Vec<User>>>, id: String) {
+fn nick_msg_handler(
+    nickmsg: NickMsg,
+    users: &mut Arc<Mutex<Vec<User>>>,
+    id: String,
+) -> Result<(), ErrorType> {
     let mut users = users.as_ref().lock().unwrap();
+    // Check if there is same nick name
+    match users
+        .iter()
+        .find(|usr| usr.get_nick_name() == Some(nickmsg.nick.0.clone()))
+    {
+        Some(_) => return Err(ErrorType::NickCollision),
+        None => {}
+    }
+
     let user = users.iter_mut().find(|usr| usr.get_id() == id).unwrap();
+
     // The user is not allowed to change the nick name
     if !user.nick_name_is_none() {
-        return;
+        return Ok(());
     }
+
+    // Set nick name
     user.set_nick_name(nickmsg.nick.0);
-    let message = &format!("You set your nick name as: {}.\r\n", Nick(user.get_nick_name().unwrap()));
-    let _ = user.get_conn_write().write_message(&message);
+    let message = &format!(
+        "You set your nick name as: {}.\r\n",
+        Nick(user.get_nick_name().unwrap())
+    );
+    let _ = user.get_conn_write().write_message(message);
+    Ok(())
 }
 
 fn user_msg_handler(usermsg: UserMsg, users: &mut Arc<Mutex<Vec<User>>>, id: String) {
@@ -71,21 +96,27 @@ fn user_msg_handler(usermsg: UserMsg, users: &mut Arc<Mutex<Vec<User>>>, id: Str
     if !user.nick_name_is_none() && !user.real_name_is_none() {
         user.set_registered();
     }
-    
-    let reply = Reply::Welcome(
-        WelcomeReply {
-            target_nick: Nick(user.get_nick_name().unwrap()),
-            message: user.get_real_name().unwrap(),
-        }
-    );
+
+    let reply = Reply::Welcome(WelcomeReply {
+        target_nick: Nick(user.get_nick_name().unwrap()),
+        message: user.get_real_name().unwrap(),
+    });
     reply_handler(reply, user);
 }
 
-fn priv_msg_handler(privmsg: PrivMsg, users: &mut Arc<Mutex<Vec<User>>>, channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>, sender_id: String) -> Result<(), ErrorType> {
+fn priv_msg_handler(
+    privmsg: PrivMsg,
+    users: &mut Arc<Mutex<Vec<User>>>,
+    channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>,
+    sender_id: String,
+) -> Result<(), ErrorType> {
     let mut users = users.as_ref().lock().unwrap();
-    let sender = users.iter_mut().find(|usr| usr.get_id() == sender_id).unwrap();
-    
-    // The sender cannot ping if they are not registered, throw an error 
+    let sender = users
+        .iter_mut()
+        .find(|usr| usr.get_id() == sender_id)
+        .unwrap();
+
+    // The sender cannot ping if they are not registered, throw an error
     if !sender.is_registered() {
         return Err(ErrorType::NoOrigin);
     }
@@ -94,7 +125,7 @@ fn priv_msg_handler(privmsg: PrivMsg, users: &mut Arc<Mutex<Vec<User>>>, channel
     match privmsg.target {
         Target::Channel(Channel(ref receiving_channel_name)) => {
             // Throw error if the user is not in channel
-            if !sender.get_channels().contains(&receiving_channel_name) {
+            if !sender.get_channels().contains(receiving_channel_name) {
                 return Err(ErrorType::NoSuchChannel);
             }
 
@@ -109,71 +140,81 @@ fn priv_msg_handler(privmsg: PrivMsg, users: &mut Arc<Mutex<Vec<User>>>, channel
                         }
                         let reply = Reply::PrivMsg(PrivReply {
                             message: privmsg.clone(),
-                            sender_nick: sender_nick.clone()
+                            sender_nick: sender_nick.clone(),
                         });
                         let receiver = users.iter_mut().find(|usr| usr.get_id() == *id).unwrap();
                         reply_handler(reply, receiver);
                     }
                     Ok(())
-                },
+                }
                 None => return Err(ErrorType::NoSuchChannel),
             }
-        },
+        }
+        
         Target::User(Nick(ref receiver_nick)) => {
             // Find receiver by Nick
             // Throw error if receiver doesn't exist
-            let receiver = users.iter_mut().find(|usr| usr.get_nick_name() == Some(receiver_nick.clone()));
+            let receiver = users
+                .iter_mut()
+                .find(|usr| usr.get_nick_name() == Some(receiver_nick.clone()));
             match receiver {
                 Some(receiver) => {
-                    let reply = Reply::PrivMsg(
-                        PrivReply {
-                            message: privmsg,
-                            sender_nick,
-                        }
-                    );
+                    let reply = Reply::PrivMsg(PrivReply {
+                        message: privmsg,
+                        sender_nick,
+                    });
                     reply_handler(reply, receiver);
                     Ok(())
-                },
+                }
                 None => return Err(ErrorType::NoSuchNick),
             }
-        },
+        }
     }
 }
 
-fn ping_msg_handler(msg: String, users: &mut Arc<Mutex<Vec<User>>>, id: String) -> Result<(), ErrorType> {
+fn ping_msg_handler(
+    msg: String,
+    users: &mut Arc<Mutex<Vec<User>>>,
+    id: String,
+) -> Result<(), ErrorType> {
     let mut users = users.as_ref().lock().unwrap();
     let user = users.iter_mut().find(|usr| usr.get_id() == id).unwrap();
-    // The user cannot ping if they are not registered, throw an error 
+    // The user cannot ping if they are not registered, throw an error
     if !user.is_registered() {
         return Err(ErrorType::NoOrigin);
     }
 
-    let reply = Reply::Pong(
-        msg
-    );
+    let reply = Reply::Pong(msg);
     reply_handler(reply, user);
     Ok(())
 }
 
-
-fn quit_msg_handler(quit_msg: QuitMsg, users: &mut Arc<Mutex<Vec<User>>>, channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>, sender_id: String) {
+fn quit_msg_handler(
+    quit_msg: QuitMsg,
+    users: &mut Arc<Mutex<Vec<User>>>,
+    channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>,
+    sender_id: String,
+) {
     let mut users = users.as_ref().lock().unwrap();
-    let sender = users.iter_mut().find(|usr| usr.get_id() == sender_id).unwrap();
+    let sender = users
+        .iter_mut()
+        .find(|usr| usr.get_id() == sender_id)
+        .unwrap();
 
-    let reply = Reply::Quit(
-        QuitReply {
-            message: quit_msg,
-            sender_nick: Nick(sender.get_nick_name().unwrap()),
-        }
-    );
+    let reply = Reply::Quit(QuitReply {
+        message: quit_msg,
+        sender_nick: Nick(sender.get_nick_name().unwrap()),
+    });
 
     // Remove the sender from all channels and send messages to users in the channel
     let sender_joined_channels = sender.get_channels().clone();
     let mut channels = channels.as_ref().lock().unwrap();
     for channel in sender_joined_channels {
         // Remove the sender from the channel list
-        channels.entry(channel.to_string()).and_modify(|x| x.retain(|usr|  usr != &sender_id));
-        
+        channels
+            .entry(channel.to_string())
+            .and_modify(|x| x.retain(|usr| usr != &sender_id));
+
         // Send message to all user in all channels
         let id_in_channels = channels.get(&channel).unwrap();
         for id in id_in_channels {
@@ -183,14 +224,22 @@ fn quit_msg_handler(quit_msg: QuitMsg, users: &mut Arc<Mutex<Vec<User>>>, channe
     }
 
     // Remove the user from user list
-    users.retain(|usr|  usr.get_id() != sender_id);
+    users.retain(|usr| usr.get_id() != sender_id);
 }
 
-fn join_msg_handler(join_msg: JoinMsg, users: &mut Arc<Mutex<Vec<User>>>, channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>, id: String) -> Result<(), ErrorType> {
+fn join_msg_handler(
+    join_msg: JoinMsg,
+    users: &mut Arc<Mutex<Vec<User>>>,
+    channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>,
+    id: String,
+) -> Result<(), ErrorType> {
     let sender_id = id;
     let mut users = users.as_ref().lock().unwrap();
-    let sender = users.iter_mut().find(|usr| usr.get_id() == sender_id).unwrap();
-    // The user cannot join if they are not registered, throw an error 
+    let sender = users
+        .iter_mut()
+        .find(|usr| usr.get_id() == sender_id)
+        .unwrap();
+    // The user cannot join if they are not registered, throw an error
     if !sender.is_registered() {
         return Err(ErrorType::NoOrigin);
     }
@@ -202,7 +251,10 @@ fn join_msg_handler(join_msg: JoinMsg, users: &mut Arc<Mutex<Vec<User>>>, channe
 
     // If the channel doesn't exist, create one
     let mut channels = channels.as_ref().lock().unwrap();
-    channels.entry(join_msg.channel.0.clone()).and_modify(|channel| channel.push(sender_id.clone())).or_insert(vec![sender_id.clone()]);
+    channels
+        .entry(join_msg.channel.0.clone())
+        .and_modify(|channel| channel.push(sender_id.clone()))
+        .or_insert(vec![sender_id.clone()]);
 
     // Save the channel for user
     sender.get_channels().push(join_msg.channel.0.clone());
@@ -217,7 +269,7 @@ fn join_msg_handler(join_msg: JoinMsg, users: &mut Arc<Mutex<Vec<User>>>, channe
         }
         let reply = Reply::Join(JoinReply {
             message: join_msg.clone(),
-            sender_nick: sender_nick.clone()
+            sender_nick: sender_nick.clone(),
         });
         let receiver = users.iter_mut().find(|usr| usr.get_id() == *id).unwrap();
         reply_handler(reply, receiver);
@@ -225,10 +277,15 @@ fn join_msg_handler(join_msg: JoinMsg, users: &mut Arc<Mutex<Vec<User>>>, channe
     Ok(())
 }
 
-fn part_msg_handler(part_msg: PartMsg, users: &mut Arc<Mutex<Vec<User>>>, channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>, id: String) -> Result<(), ErrorType> {
+fn part_msg_handler(
+    part_msg: PartMsg,
+    users: &mut Arc<Mutex<Vec<User>>>,
+    channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>,
+    id: String,
+) -> Result<(), ErrorType> {
     let mut users = users.as_ref().lock().unwrap();
     let sender = users.iter_mut().find(|usr| usr.get_id() == id).unwrap();
-    // The sender cannot join if they are not registered, throw an error 
+    // The sender cannot join if they are not registered, throw an error
     if !sender.is_registered() {
         return Err(ErrorType::NoOrigin);
     }
@@ -239,11 +296,15 @@ fn part_msg_handler(part_msg: PartMsg, users: &mut Arc<Mutex<Vec<User>>>, channe
     }
 
     // Remove joined channel for sender
-    sender.get_channels().retain(|chanl| chanl != &part_msg.channel.0);
+    sender
+        .get_channels()
+        .retain(|chanl| chanl != &part_msg.channel.0);
 
     // Remove sender from channel
     let mut channels = channels.as_ref().lock().unwrap();
-    channels.entry(part_msg.channel.0.clone()).and_modify(|x| x.retain(|usr|  usr != &id));
+    channels
+        .entry(part_msg.channel.0.clone())
+        .and_modify(|x| x.retain(|usr| usr != &id));
 
     let sender_nick = Nick(sender.get_nick_name().unwrap());
 
@@ -252,7 +313,7 @@ fn part_msg_handler(part_msg: PartMsg, users: &mut Arc<Mutex<Vec<User>>>, channe
     for id in id_in_channel {
         let reply = Reply::Part(PartReply {
             message: part_msg.clone(),
-            sender_nick: sender_nick.clone()
+            sender_nick: sender_nick.clone(),
         });
         let receiver = users.iter_mut().find(|usr| usr.get_id() == *id).unwrap();
         reply_handler(reply, receiver);
