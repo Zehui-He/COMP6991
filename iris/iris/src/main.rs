@@ -1,7 +1,7 @@
 use clap::Parser;
 use iris_lib::{
     connect::{ConnectionError, ConnectionManager},
-    types::{SERVER_NAME, UnparsedMessage, Nick, ParsedMessage}, user::User, handler::parse_error_handler,
+    types::{SERVER_NAME, UnparsedMessage, Nick, ParsedMessage, Message}, user::User, handler::parse_error_handler,
 };
 use std::{net::IpAddr, sync::{self, Arc, Mutex}, collections::HashMap};
 use iris_lib::handler::parsed_msg_handler;
@@ -76,8 +76,17 @@ fn main() {
         {
             let mut users = users.clone();
             let sender = sender.clone();
+
+            // Flag of thread continuation
+            let mut user_quited = false;
+
             std::thread::spawn(move || {
                 loop {
+                    // Kill the thread if the user quited
+                    if user_quited {
+                        break;
+                    }
+
                     println!("Waiting for message...");
                     let message = match conn_read.read_message() {
                         Ok(message) => message,
@@ -112,15 +121,17 @@ fn main() {
                     // Send back an error message if there is a parsing error, otherwise send to the reply thread for further process
                     match processed_msg {
                         Ok(processed_msg) => {
+                            // Set quit signal for thread
+                            match processed_msg.message {
+                                Message::Quit(_) => {
+                                    user_quited = true;
+                                },
+                                _ => {}
+                            }
                             sender.send((processed_msg, conn_read.id())).unwrap();
                         },
                         Err(err) => parse_error_handler(err, &mut users, conn_read.id()),
                     }
-        
-                    // // If the user quits, kill the connection and remove user from user list
-                    // if user.is_quit() {
-                    //     break;
-                    // }
                 }
             });
         }

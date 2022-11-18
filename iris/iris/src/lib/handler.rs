@@ -1,8 +1,8 @@
 use std::{sync::{Arc, Mutex}, collections::HashMap};
 
-use crate::{types::{ParsedMessage, ErrorType, NickMsg, UserMsg, Nick, Reply, WelcomeReply, QuitMsg, QuitReply, PrivMsg, Target, PrivReply, Message, JoinMsg, PartMsg}, user::User};
+use crate::{types::{ParsedMessage, ErrorType, NickMsg, UserMsg, Nick, Reply, WelcomeReply, QuitMsg, QuitReply, PrivMsg, Target, PrivReply, Message, JoinMsg, PartMsg, PartReply, JoinReply, Channel}, user::User};
 
-// Process the parsed message
+/// Process the parsed message
 pub fn parsed_msg_handler(parsed_msg: ParsedMessage, users: &mut Arc<Mutex<Vec<User>>>, channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>, id: String) -> Result<(), ErrorType> {
     match parsed_msg.message {
         Message::Nick(nickmsg) => Ok({
@@ -12,7 +12,7 @@ pub fn parsed_msg_handler(parsed_msg: ParsedMessage, users: &mut Arc<Mutex<Vec<U
             user_msg_handler(usermsg, users, id);
         }),
         Message::PrivMsg(privmsg) => {
-            priv_msg_handler(privmsg, users, id)
+            priv_msg_handler(privmsg, users, channels, id)
         },
         Message::Ping(message) => {
             ping_msg_handler(message, users, id)
@@ -24,13 +24,13 @@ pub fn parsed_msg_handler(parsed_msg: ParsedMessage, users: &mut Arc<Mutex<Vec<U
             part_msg_handler(partmsg, users, channels, id)
         },
         Message::Quit(quitmsg) => Ok({
-            quit_msg_handler(quitmsg, users, id);
+            quit_msg_handler(quitmsg, users, channels, id);
         }),
     }
 }
 
 /// Function that used to give back a reply to the user.
-pub fn reply_handler(reply: Reply, user: &mut User) {
+fn reply_handler(reply: Reply, user: &mut User) {
     let message = &format!("{}", reply);
     let _ = user.get_conn_write().write_message(message);
 }
@@ -81,8 +81,7 @@ fn user_msg_handler(usermsg: UserMsg, users: &mut Arc<Mutex<Vec<User>>>, id: Str
     reply_handler(reply, user);
 }
 
-// TODO: Not implement send to channel
-fn priv_msg_handler(privmsg: PrivMsg, users: &mut Arc<Mutex<Vec<User>>>, sender_id: String) -> Result<(), ErrorType> {
+fn priv_msg_handler(privmsg: PrivMsg, users: &mut Arc<Mutex<Vec<User>>>, channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>, sender_id: String) -> Result<(), ErrorType> {
     let mut users = users.as_ref().lock().unwrap();
     let sender = users.iter_mut().find(|usr| usr.get_id() == sender_id).unwrap();
     
@@ -91,10 +90,35 @@ fn priv_msg_handler(privmsg: PrivMsg, users: &mut Arc<Mutex<Vec<User>>>, sender_
         return Err(ErrorType::NoOrigin);
     }
     let sender_nick = Nick(sender.get_nick_name().unwrap());
-    drop(sender);
 
     match privmsg.target {
-        Target::Channel(_) => todo!(),
+        Target::Channel(Channel(ref receiving_channel_name)) => {
+            // Throw error if the user is not in channel
+            if !sender.get_channels().contains(&receiving_channel_name) {
+                return Err(ErrorType::NoSuchChannel);
+            }
+
+            // Send the message to everyone in channel
+            let channels = channels.as_ref().lock().unwrap();
+            let receiving_channel = channels.get(receiving_channel_name);
+            match receiving_channel {
+                Some(id_in_channel) => {
+                    for id in id_in_channel {
+                        if *id == sender_id {
+                            continue;
+                        }
+                        let reply = Reply::PrivMsg(PrivReply {
+                            message: privmsg.clone(),
+                            sender_nick: sender_nick.clone()
+                        });
+                        let receiver = users.iter_mut().find(|usr| usr.get_id() == *id).unwrap();
+                        reply_handler(reply, receiver);
+                    }
+                    Ok(())
+                },
+                None => return Err(ErrorType::NoSuchChannel),
+            }
+        },
         Target::User(Nick(ref receiver_nick)) => {
             // Find receiver by Nick
             // Throw error if receiver doesn't exist
@@ -132,70 +156,106 @@ fn ping_msg_handler(msg: String, users: &mut Arc<Mutex<Vec<User>>>, id: String) 
 }
 
 
-// TODO: The quit message should send to all users in the channel
-// Only send to user now
-fn quit_msg_handler(quit_msg: QuitMsg, users: &mut Arc<Mutex<Vec<User>>>, id: String) {
+fn quit_msg_handler(quit_msg: QuitMsg, users: &mut Arc<Mutex<Vec<User>>>, channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>, sender_id: String) {
     let mut users = users.as_ref().lock().unwrap();
-    let user = users.iter_mut().find(|usr| usr.get_id() == id).unwrap();
+    let sender = users.iter_mut().find(|usr| usr.get_id() == sender_id).unwrap();
 
     let reply = Reply::Quit(
         QuitReply {
             message: quit_msg,
-            sender_nick: Nick(user.get_nick_name().unwrap()),
+            sender_nick: Nick(sender.get_nick_name().unwrap()),
         }
     );
-    user.set_quit();
-    reply_handler(reply, user);
+
+    // Remove the sender from all channels and send messages to users in the channel
+    let sender_joined_channels = sender.get_channels().clone();
+    let mut channels = channels.as_ref().lock().unwrap();
+    for channel in sender_joined_channels {
+        // Remove the sender from the channel list
+        channels.entry(channel.to_string()).and_modify(|x| x.retain(|usr|  usr != &sender_id));
+        
+        // Send message to all user in all channels
+        let id_in_channels = channels.get(&channel).unwrap();
+        for id in id_in_channels {
+            let receiver = users.iter_mut().find(|usr| usr.get_id() == *id).unwrap();
+            reply_handler(reply.clone(), receiver);
+        }
+    }
+
+    // Remove the user from user list
+    users.retain(|usr|  usr.get_id() != sender_id);
 }
 
 fn join_msg_handler(join_msg: JoinMsg, users: &mut Arc<Mutex<Vec<User>>>, channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>, id: String) -> Result<(), ErrorType> {
+    let sender_id = id;
     let mut users = users.as_ref().lock().unwrap();
-    let user = users.iter_mut().find(|usr| usr.get_id() == id).unwrap();
+    let sender = users.iter_mut().find(|usr| usr.get_id() == sender_id).unwrap();
     // The user cannot join if they are not registered, throw an error 
-    if !user.is_registered() {
+    if !sender.is_registered() {
         return Err(ErrorType::NoOrigin);
     }
 
     // Do nothing if the user is already in the channel
-    if user.get_channels().contains(&join_msg.channel.0) {
+    if sender.get_channels().contains(&join_msg.channel.0) {
         return Ok(());
     }
 
     // If the channel doesn't exist, create one
     let mut channels = channels.as_ref().lock().unwrap();
-    channels.entry(join_msg.channel.0.clone()).and_modify(|channel| channel.push(id.clone())).or_insert(vec![id]);
+    channels.entry(join_msg.channel.0.clone()).and_modify(|channel| channel.push(sender_id.clone())).or_insert(vec![sender_id.clone()]);
 
     // Save the channel for user
-    user.get_channels().push(join_msg.channel.0);
+    sender.get_channels().push(join_msg.channel.0.clone());
 
-    println!("{:?}", channels);
-    println!("User joined channels: {:?}", user.get_channels());
+    let sender_nick = Nick(sender.get_nick_name().unwrap());
 
+    // Send message to every other user in the channel
+    let id_in_channel = channels.get(&join_msg.channel.0).unwrap();
+    for id in id_in_channel {
+        if id == &sender_id {
+            continue;
+        }
+        let reply = Reply::Join(JoinReply {
+            message: join_msg.clone(),
+            sender_nick: sender_nick.clone()
+        });
+        let receiver = users.iter_mut().find(|usr| usr.get_id() == *id).unwrap();
+        reply_handler(reply, receiver);
+    }
     Ok(())
 }
 
 fn part_msg_handler(part_msg: PartMsg, users: &mut Arc<Mutex<Vec<User>>>, channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>, id: String) -> Result<(), ErrorType> {
     let mut users = users.as_ref().lock().unwrap();
-    let user = users.iter_mut().find(|usr| usr.get_id() == id).unwrap();
-    // The user cannot join if they are not registered, throw an error 
-    if !user.is_registered() {
+    let sender = users.iter_mut().find(|usr| usr.get_id() == id).unwrap();
+    // The sender cannot join if they are not registered, throw an error 
+    if !sender.is_registered() {
         return Err(ErrorType::NoOrigin);
     }
 
-    // If the user doesn't joined the channel, throw error
-    if !user.get_channels().contains(&part_msg.channel.0) {
+    // If the sender doesn't joined the channel, throw error
+    if !sender.get_channels().contains(&part_msg.channel.0) {
         return Err(ErrorType::NoSuchChannel);
     }
 
-    // Remove joined channel for user
-    user.get_channels().retain(|chanl| chanl != &part_msg.channel.0);
+    // Remove joined channel for sender
+    sender.get_channels().retain(|chanl| chanl != &part_msg.channel.0);
 
-    // Remove user from channel
+    // Remove sender from channel
     let mut channels = channels.as_ref().lock().unwrap();
-    channels.entry(part_msg.channel.0).and_modify(|x| x.retain(|usr|  usr != &id));
+    channels.entry(part_msg.channel.0.clone()).and_modify(|x| x.retain(|usr|  usr != &id));
 
-    println!("{:?}", channels);
-    println!("User joined channels: {:?}", user.get_channels());
+    let sender_nick = Nick(sender.get_nick_name().unwrap());
 
+    // Send message to every user in the channel
+    let id_in_channel = channels.get(&part_msg.channel.0).unwrap();
+    for id in id_in_channel {
+        let reply = Reply::Part(PartReply {
+            message: part_msg.clone(),
+            sender_nick: sender_nick.clone()
+        });
+        let receiver = users.iter_mut().find(|usr| usr.get_id() == *id).unwrap();
+        reply_handler(reply, receiver);
+    }
     Ok(())
 }
