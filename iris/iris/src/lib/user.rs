@@ -1,5 +1,7 @@
+/// Struct to represend a user in the IRC server.
 use crate::connect::ConnectionWrite;
 
+/// Struct to represend a user in the IRC server.
 pub struct User {
     ip_address: String,
     nick_name: Option<String>,

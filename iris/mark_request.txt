@@ -34,10 +34,15 @@ Lines starting with ">" are additional comments.)
 
 [X] My design never stores messages, and deletes users as soon as they have left the server.
 
-[ ] It is possible to set reminders, using the following command (change this if you'd like)
-> PRIVMSG remindbot :10s tfpk :Remind me of something.
+[X] It is possible to set reminders, using the following command (change this if you'd like)
+Two example plugins are provided:
+1. A repeat reminder that keep send a reminding message to the user for every 60 seconds.
+> PRIVMSG reminder : meessage to remind
 
-[ ] I have provided an "example" plugin, which explains how somebody else can interface with my plugin system.
+2. A time checker
+> PRIVMSG checktime : ignored
+
+[X] I have provided an "example" plugin, which explains how somebody else can interface with my plugin system.
 
 ## Design Excellence
 
@@ -60,4 +65,5 @@ If you made any design decisions which you now regret making; but don't to go ba
 let us know here. You can make up your design marks by acknowledging up to 5 things you would do
 differently now.
 
-> - TODO
+> Should use a struct to store all the user properly and provide method to access users. 
+> The reminder system need a parsing system to do more complex job.

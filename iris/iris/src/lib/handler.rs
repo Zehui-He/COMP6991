@@ -4,6 +4,7 @@ use std::{
 };
 
 use crate::{
+    plugin::Plugin,
     types::{
         Channel, ErrorType, JoinMsg, JoinReply, Message, Nick, NickMsg, ParsedMessage, PartMsg,
         PartReply, PrivMsg, PrivReply, QuitMsg, QuitReply, Reply, Target, UserMsg, WelcomeReply,
@@ -23,7 +24,7 @@ pub fn parsed_msg_handler(
         Message::User(usermsg) => {
             user_msg_handler(usermsg, users, id);
             Ok(())
-        },
+        }
         Message::PrivMsg(privmsg) => priv_msg_handler(privmsg, users, channels, id),
         Message::Ping(message) => ping_msg_handler(message, users, id),
         Message::Join(joinmsg) => join_msg_handler(joinmsg, users, channels, id),
@@ -31,7 +32,7 @@ pub fn parsed_msg_handler(
         Message::Quit(quitmsg) => {
             quit_msg_handler(quitmsg, users, channels, id);
             Ok(())
-        },
+        }
     }
 }
 
@@ -110,6 +111,10 @@ fn priv_msg_handler(
     channels: &mut Arc<Mutex<HashMap<String, Vec<String>>>>,
     sender_id: String,
 ) -> Result<(), ErrorType> {
+    // This is for potential plugin use
+    let user_temp = users.clone();
+    let channel_temp = channels.clone();
+
     let mut users = users.as_ref().lock().unwrap();
     let sender = users
         .iter_mut()
@@ -150,8 +155,21 @@ fn priv_msg_handler(
                 None => return Err(ErrorType::NoSuchChannel),
             }
         }
-        
+
         Target::User(Nick(ref receiver_nick)) => {
+            // Handle plugins
+            let plugin_obj = Plugin::new();
+            if plugin_obj.is_a_plugin(receiver_nick) {
+                plugin_obj.generate_thread(
+                    user_temp,
+                    channel_temp,
+                    sender_id,
+                    privmsg.message,
+                    receiver_nick.to_string(),
+                );
+                return Ok(());
+            }
+
             // Find receiver by Nick
             // Throw error if receiver doesn't exist
             let receiver = users
