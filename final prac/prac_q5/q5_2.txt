@@ -1,0 +1,1 @@
+The Mutex return a result because it is possible that the Mutex is poisoned by a thread, which holds the lock of the Mutex and being panicked.

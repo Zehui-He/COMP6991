@@ -1,0 +1,2 @@
+This is because the ownership of 'coord1' is transferred to 'coord2'. It cannot be further used. 
+Rust use ownership to prevent memory leak without a garbage colltector.

@@ -1,0 +1,7 @@
+A possible case is that he wants to save some type T inside a vector.
+
+In his first implementation, the type saved inside the vector is fixed. The parameter that on the function cannot define the type he wants to save inside
+the vector.
+
+While in his second implementation, the type parameter is on the struct definition. This would allow him to use a generic type to save any data type in 
+the vector.

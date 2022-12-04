@@ -1,0 +1,5 @@
+1. Rust does not implement this operation because it would likely involve an implicit allocation, which could be expensive.
+
+2. It is possible. This can be done by implementing the 'Add' trait for &str, returning a String object.
+
+3. They should not implement this feature because Rust doesn't want implicit allocation.

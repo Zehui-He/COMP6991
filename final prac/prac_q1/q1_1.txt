@@ -1,0 +1,2 @@
+A simple example can be error code checking. In C, you have to user a lot of if else statment to exhaust all of the possible values.
+However, in Rust, only one match statment is needed. This can significantly improve the readability of the code.

@@ -1,0 +1,3 @@
+The user may potentially forget to unlock a locked object after they are done with object.
+However, in Rust, the object can be unlock once the mutexGuard is dropped(out of scope).
+This also prevent user from accessing a locked object.

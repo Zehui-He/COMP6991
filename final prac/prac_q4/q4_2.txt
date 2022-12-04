@@ -1,0 +1,14 @@
+Enum:
+    Advantage: 
+
+    Disadvantage:
+
+Trait object:
+    Advantage:
+
+    Disadvantage:
+
+Generic type (as fn foo(...) -> impl Trait):
+    Advantage:
+
+    Disadvantage:

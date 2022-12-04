@@ -1,0 +1,10 @@
+Assume we currently have the following code:
+
+let my_str = String::from("hello");
+
+1. You can get a shared borrow by:
+    let my_share = &my_str;
+
+2. You cannot turn a shared borrow into an exclusive borrow since a shared borrow is read-only and it cannot mutate the object.
+
+3. An exclusive borrow is allowed to read and mutate the object. If the mutablity is nor required, you can 'downgrade' it into a shared borrow.
