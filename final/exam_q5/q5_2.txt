@@ -1,0 +1,6 @@
+1.
+Cell, RefCell
+
+2.
+This is because these types are still mutable via a shared borrow. This 
+behaviour is known as 'interior mutability'

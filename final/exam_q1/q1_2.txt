@@ -1,0 +1,8 @@
+1.
+The code will not compile because it is trying to do 'add' operation between 
+objects of two types while rust doesn't support implicit type traformation. 
+
+2. 
+Rust designed in this way to prevent users from accidently add up objects of 
+different types. More importantly, such 'add' operation may involve implicit 
+allocation of memory, which is expensive.

@@ -1,0 +1,9 @@
+The Option type is an enum that can return None or Some(type). This means there is nothing or something 
+in the returned value. While the Result type can return Ok(type) or Err(type). This means there is some 
+result or there is an error. 
+
+Option: it can be used in poping the last item from a vector. If there is no item in the vector, it should 
+return None. If there is item in the vector, return Some(type).
+
+Result: it can be used in reading a file. If there is an error occur while reading the file, for example, 
+access denied, the Result should return an Err(AccessDenied). Otherwise it should return Ok(file).

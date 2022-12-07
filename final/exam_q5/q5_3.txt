@@ -1,0 +1,11 @@
+1.
+Issue 1: the thread are not joined at the end so the main thread won't wait 
+them to finish. That's why he needs to loop from 0 to 1999.
+
+Issue 2: he can combine pushing and adding in 1 step with one mutex.lock. The 
+lock and unlock operation can be costly. 
+
+2.
+I partially agree with Zain. In rust, it can save you from data racing 
+or undefined behavirous. However, it cannot safe you from logic mistakes, 
+which might be a bigger problem. 

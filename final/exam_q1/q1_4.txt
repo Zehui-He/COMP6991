@@ -1,0 +1,14 @@
+1.
+Issue: The user need to check the returned number to see if the file is opened.
+Fix: A better implementation is to return a Result(OK(file_id), Err(error_code)).
+
+
+2.
+Issue: the read_file function would not work as the file_id parameter has 
+a type of i32, which is mismatched with the type of file_id in the open_file 
+function.
+Fix: change the file_id in read_file function to u32.
+
+3. 
+Issue: the buffer is a share borrow. No content can be written into the buffer.
+Fix: change the buffer in read_file function to buffer: &mut [u8].

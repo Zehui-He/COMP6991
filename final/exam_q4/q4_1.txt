@@ -1,0 +1,9 @@
+1.
+The first approach means the function would take slice of ONE concrete type 
+which implemented the Car trait. While the second approach would can take a 
+slice of MULTIPLE types that implemented the Car trait. The Box wrapper is to 
+fix the size of input parameter regardless what concrete type is given. 
+
+2.
+If the all the cars can be represented in the same struct, I would choose the 
+first approch. Otherwise I would choose the second approach.

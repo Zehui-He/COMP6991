@@ -1,0 +1,7 @@
+1.
+The second implementation only takes a share borrow of string. This means the 
+string will not be consumed by the function and the string can be reused later.
+
+2.
+The third implementation improved the flexibility of the function. The function 
+now can take any type that implemented the AsRef<str> trait as parameter. 

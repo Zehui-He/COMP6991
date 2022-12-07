@@ -1,0 +1,9 @@
+1.
+This is not good in rust because all of the nodes are holding a share reference 
+of each other. This make the nodes are impossible to mutate, i.e. obtain an 
+exclusive reference, due to the existance of the share reference.
+
+2.
+As the nodes holds a reference of another node, it is required to involk liftime. 
+If one of the referenced node is dropped, the nodes which hold a reference of the 
+dropped node would also dropped. This would lead to the breakdwon of the struct. 

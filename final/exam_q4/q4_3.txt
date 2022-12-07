@@ -1,0 +1,5 @@
+1.
+This error is because the into_iter method would consume 
+
+2.
+This can be simply solved by changing the into_iter() to iter().
