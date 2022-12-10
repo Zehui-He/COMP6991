@@ -1,0 +1,4191 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)https://cgi.cse.unsw.edu.au/~cs6991/current/exam/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>
+        COMP6991 22T3 —
+        Solving Modern Programming Problems with Rust
+    </title>
+
+    <link rel="canonical" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/">
+    
+    <link rel="shortcut icon" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/static/staging-favicon.jpg?1670277300740" type="image/x-icon">
+    
+
+    <link rel="stylesheet" href="./COMP6991 22T3 — Solving Modern Programming Problems with Rust_files/bootstrap.min.css" integrity="sha256-aAr2Zpq8MZ+YA/D6JtRD3xtrwpEz2IqOS+pWD/7XKIw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="./COMP6991 22T3 — Solving Modern Programming Problems with Rust_files/course.css">
+    
+    <script src="./COMP6991 22T3 — Solving Modern Programming Problems with Rust_files/jquery.min.js.download" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="./COMP6991 22T3 — Solving Modern Programming Problems with Rust_files/popper.min.js.download" integrity="sha256-/ijcOLwFf26xEYAjW75FizKVo5tnTYiQddPZoLUHHZ8=" crossorigin="anonymous"></script>
+    <script src="./COMP6991 22T3 — Solving Modern Programming Problems with Rust_files/bootstrap.min.js.download" integrity="sha256-OFRAJNoaD8L3Br5lglV7VyLRf0itmoBzWUoM+Sji4/8=" crossorigin="anonymous"></script>
+
+    <!-- <script async src="https://static.codepen.io/assets/embed/ei.js"></script> -->
+
+    <!-- MathJax. -->
+    
+
+    
+    
+
+    
+<script type="text/javascript" async="" src="./COMP6991 22T3 — Solving Modern Programming Problems with Rust_files/MathJax.js.download"></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover, .MJXp-munder {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > *, .MJXp-munder > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body class="d-flex flex-column" style="min-height: 100vh;"><div id="MathJax_Message" style="display: none;"></div>
+<nav class="navbar fixed-top navbar-expand-lg navbar-light no-print" id="header-navbar">
+    <div class="container">
+        <div class="mr-auto">
+            <button id="hide-contentbar" class="toggler-button" onclick="document.getElementById(&#39;contentbar&#39;).classList.toggle(&#39;hidden-contentbar&#39;)">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/">
+              COMP6991 - 22T3 
+            </a>
+        </div>
+        <div class="">
+          <a href="https://doc.rust-lang.org/stable/std/" target="_blank">
+            <img loading="lazy" src="./COMP6991 22T3 — Solving Modern Programming Problems with Rust_files/ferris.png" height="48">
+          </a>
+        </div>
+    </div>
+</nav>
+<main class="container" aria-label="Content" style="flex: 1; padding-top: 4rem;">
+    <div class="row">
+        <nav id="contentbar" class="bg-light sidebar col-lg-3 hidden-contentbar">
+            <div class="sidebar-sticky pt-3">
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mb-1 text-muted">
+                    Important Links
+                </h6>
+
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="d-flex nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/forum/" target="_blank">
+                            Course Forum
+                            <img style="color: black;" onload="this.style.color=&#39;black&#39;" class="justify-content-between" src="./COMP6991 22T3 — Solving Modern Programming Problems with Rust_files/new_tab_icon.png" width="20" height="20" alt="open in new tab">
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://forms.gle/rhGWYHrj6xzUZGsD9" target="_blank">
+                            Course Feedback
+                            <img style="color: black;" onload="this.style.color=&#39;black&#39;" class="justify-content-between" src="./COMP6991 22T3 — Solving Modern Programming Problems with Rust_files/new_tab_icon.png" width="20" height="20" alt="open in new tab">
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="d-flex nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/outline" target="_blank">
+                            Course Outline
+                            <img style="color: black;" onload="this.style.color=&#39;black&#39;" class="justify-content-between" src="./COMP6991 22T3 — Solving Modern Programming Problems with Rust_files/new_tab_icon.png" width="20" height="20" alt="open in new tab">
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/timetable">
+                            Course Timetable
+                        </a>
+                    </li>
+                </ul><h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    Resources
+                </h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" type="button" data-toggle="collapse" href="https://cgi.cse.unsw.edu.au/~cs6991/current/exam/#home-computing">
+                            Home Computing
+                        </a>
+                        <div class="collapse" id="home-computing">
+                            <div class="card card-body" style="padding: 0.5rem">
+                                
+                                <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/resources/rust-toolchain">
+                                Installing the Rust toolchain
+                                </a>
+                                <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/resources/editor-vscode">
+                                Writing Rust in VS Code
+                                </a>
+                                <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/resources/editor-neovim">
+                                Writing Rust in Neovim
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lectures">
+                            Lectures
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/gallery">
+                            Gallery
+                        </a>
+                    </li>
+                </ul>
+
+                
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        Assignments
+                    </h6>
+
+                      
+                          
+                              <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/assignment/01">
+                                  Assignment 1
+                              </a>
+                          
+                              <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/assignment/02">
+                                  Assignment 2
+                              </a>
+                          
+                      
+                
+
+
+                
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        Week by Week
+                    </h6>
+
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                                <a class="nav-link" type="button" data-toggle="collapse" href="https://cgi.cse.unsw.edu.au/~cs6991/current/exam/#week00">
+                                    Week 00
+                                </a>
+                                <div class="collapse " id="week00">
+                                    <div class="card card-body" style="padding: 0.5rem">
+                                        
+                                            
+                                                
+                                            
+                                        
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/00/questions">
+                                                        Weekly Exercises
+                                                    </a>
+                                                    
+                                                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/00/answers">
+                                                            Exercise Answers
+                                                        </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                    </div>
+                                </div>
+                            </li>
+                        <li class="nav-item">
+                                <a class="nav-link" type="button" data-toggle="collapse" href="https://cgi.cse.unsw.edu.au/~cs6991/current/exam/#week01">
+                                    Week 01
+                                </a>
+                                <div class="collapse " id="week01">
+                                    <div class="card card-body" style="padding: 0.5rem">
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/revision/01/questions">
+                                                        Revision Questions
+                                                    </a>
+                                                    
+                                                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/revision/01/answers">
+                                                            Revision Answers
+                                                        </a>
+                                                    
+                                                
+                                            
+                                        
+                                        
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/01/questions">
+                                                        Weekly Exercises
+                                                    </a>
+                                                    
+                                                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/01/answers">
+                                                            Exercise Answers
+                                                        </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/workshop/01/questions">
+                                                        Workshop Questions
+                                                    </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                    </div>
+                                </div>
+                            </li>
+                        <li class="nav-item">
+                                <a class="nav-link" type="button" data-toggle="collapse" href="https://cgi.cse.unsw.edu.au/~cs6991/current/exam/#week02">
+                                    Week 02
+                                </a>
+                                <div class="collapse " id="week02">
+                                    <div class="card card-body" style="padding: 0.5rem">
+                                        
+                                            
+                                                
+                                            
+                                        
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/02/questions">
+                                                        Weekly Exercises
+                                                    </a>
+                                                    
+                                                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/02/answers">
+                                                            Exercise Answers
+                                                        </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/workshop/02/questions">
+                                                        Workshop Questions
+                                                    </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                    </div>
+                                </div>
+                            </li>
+                        <li class="nav-item">
+                                <a class="nav-link" type="button" data-toggle="collapse" href="https://cgi.cse.unsw.edu.au/~cs6991/current/exam/#week03">
+                                    Week 03
+                                </a>
+                                <div class="collapse " id="week03">
+                                    <div class="card card-body" style="padding: 0.5rem">
+                                        
+                                            
+                                                
+                                            
+                                        
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/03/questions">
+                                                        Weekly Exercises
+                                                    </a>
+                                                    
+                                                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/03/answers">
+                                                            Exercise Answers
+                                                        </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/workshop/03/questions">
+                                                        Workshop Questions
+                                                    </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                    </div>
+                                </div>
+                            </li>
+                        <li class="nav-item">
+                                <a class="nav-link" type="button" data-toggle="collapse" href="https://cgi.cse.unsw.edu.au/~cs6991/current/exam/#week04">
+                                    Week 04
+                                </a>
+                                <div class="collapse " id="week04">
+                                    <div class="card card-body" style="padding: 0.5rem">
+                                        
+                                            
+                                                
+                                            
+                                        
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/04/questions">
+                                                        Weekly Exercises
+                                                    </a>
+                                                    
+                                                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/04/answers">
+                                                            Exercise Answers
+                                                        </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/workshop/04/questions">
+                                                        Workshop Questions
+                                                    </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                    </div>
+                                </div>
+                            </li>
+                        <li class="nav-item">
+                                <a class="nav-link" type="button" data-toggle="collapse" href="https://cgi.cse.unsw.edu.au/~cs6991/current/exam/#week05">
+                                    Week 05
+                                </a>
+                                <div class="collapse " id="week05">
+                                    <div class="card card-body" style="padding: 0.5rem">
+                                        
+                                            
+                                                
+                                            
+                                        
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/05/questions">
+                                                        Weekly Exercises
+                                                    </a>
+                                                    
+                                                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/05/answers">
+                                                            Exercise Answers
+                                                        </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/workshop/05/questions">
+                                                        Workshop Questions
+                                                    </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                    </div>
+                                </div>
+                            </li>
+                        <li class="nav-item">
+                                <a class="nav-link" type="button" data-toggle="collapse" href="https://cgi.cse.unsw.edu.au/~cs6991/current/exam/#week07">
+                                    Week 07
+                                </a>
+                                <div class="collapse " id="week07">
+                                    <div class="card card-body" style="padding: 0.5rem">
+                                        
+                                            
+                                                
+                                            
+                                        
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/07/questions">
+                                                        Weekly Exercises
+                                                    </a>
+                                                    
+                                                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/07/answers">
+                                                            Exercise Answers
+                                                        </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/workshop/07/questions">
+                                                        Workshop Questions
+                                                    </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                    </div>
+                                </div>
+                            </li>
+                        <li class="nav-item">
+                                <a class="nav-link" type="button" data-toggle="collapse" href="https://cgi.cse.unsw.edu.au/~cs6991/current/exam/#week08">
+                                    Week 08
+                                </a>
+                                <div class="collapse " id="week08">
+                                    <div class="card card-body" style="padding: 0.5rem">
+                                        
+                                            
+                                                
+                                            
+                                        
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/08/questions">
+                                                        Weekly Exercises
+                                                    </a>
+                                                    
+                                                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/08/answers">
+                                                            Exercise Answers
+                                                        </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/workshop/08/questions">
+                                                        Workshop Questions
+                                                    </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                    </div>
+                                </div>
+                            </li>
+                        <li class="nav-item">
+                                <a class="nav-link" type="button" data-toggle="collapse" href="https://cgi.cse.unsw.edu.au/~cs6991/current/exam/#week09">
+                                    Week 09
+                                </a>
+                                <div class="collapse " id="week09">
+                                    <div class="card card-body" style="padding: 0.5rem">
+                                        
+                                            
+                                                
+                                            
+                                        
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/09/questions">
+                                                        Weekly Exercises
+                                                    </a>
+                                                    
+                                                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/09/answers">
+                                                            Exercise Answers
+                                                        </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/workshop/09/questions">
+                                                        Workshop Questions
+                                                    </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                    </div>
+                                </div>
+                            </li>
+                        <li class="nav-item">
+                                <a class="nav-link" type="button" data-toggle="collapse" href="https://cgi.cse.unsw.edu.au/~cs6991/current/exam/#week10">
+                                    Week 10
+                                </a>
+                                <div class="collapse  show " id="week10">
+                                    <div class="card card-body" style="padding: 0.5rem">
+                                        
+                                            
+                                                
+                                            
+                                        
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/10/questions">
+                                                        Weekly Exercises
+                                                    </a>
+                                                    
+                                                        <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/lab/10/answers">
+                                                            Exercise Answers
+                                                        </a>
+                                                    
+                                                
+                                            
+                                        
+                                            
+                                        
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                            
+                                        
+                                            
+                                                
+                                                    <a class="nav-link" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/workshop/10/questions">
+                                                        Workshop Questions
+                                                    </a>
+                                                    
+                                                
+                                            
+                                        
+                                    </div>
+                                </div>
+                            </li>
+                        
+                    </ul>
+                
+
+                <ul class="nav flex-column">
+
+                </ul>
+
+                <div class="pb-3"></div>
+            </div>
+        </nav>
+        <div class="col-md ml-sm-auto col-lg px-md-4">
+            
+
+                <header>
+                    
+  <h1 class="text-center course-title">COMP6991 Final Exam</h1>
+
+                </header>
+
+                
+
+
+
+
+<div class="tutlab lab">
+
+
+
+<section>
+  <header><h3>Getting Started</h3></header>
+  
+  
+    <p>
+      Create a new directory for this lab called <code>exam_final</code>,
+      change to this directory,
+      and fetch the provided code for the exam
+      by running these commands:
+
+</p><pre is="tty"><kbd is="sh">mkdir exam_final</kbd>
+<kbd is="sh">cd exam_final</kbd>
+<kbd is="sh">6991 fetch exam</kbd></pre>
+
+    <p>
+      Or, if you're not working on CSE,
+      you can download the provided code
+      as a <a href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/exam/starter.tar">tar file</a>.
+  
+</p></section>
+
+
+
+
+
+
+
+
+  
+    
+<section class="exercise">
+    <header><h3><small style="font-variant: small-caps; text-transform: lowercase;">
+    
+    
+    Exercise:
+</small>
+<br>Exam Preamble</h3></header>
+
+    
+
+    
+    
+    
+
+
+<h4>Starting time: 2022-12-06 09:00:00</h4>
+<h4>Finishing time: 2022-12-06 12:00:00</h4>
+<h4>Time for the exam: 3 hours</h4>
+<h4>This exam contains <b>8</b> questions, each of equal weight (10 marks each).</h4>
+<h4>Total number of marks: 80</h4>
+<h4>You should attempt all questions.</h4>
+
+<h3>Exam Condition Summary</h3>
+<ul>
+  <li>This exam is “Open Book”</li>
+  <li>Joint work is NOT permitted in this exam</li>
+  <li>You are NOT permitted to communicate (email, phone, message, talk) with anyone during this exam, except for the COMP6991 staff via cs6991.exam@cse.unsw.edu.au</li>
+  <li>The exam paper is confidential, sharing it during or after the exam is prohibited.</li>
+  <li>You are NOT permitted to submit code that is not your own</li>
+  <li>You may NOT ask for help from online sources.</li>
+  <li>Even after you finish the exam, on the day of the exam, do NOT communicate your exam answers to anyone. Some students have extended time to complete the exam.</li>
+  <li>Do NOT place your exam work in any location, including file sharing services such as Dropbox or GitHub, accessible to any other person.</li>
+  <li>Your zpass should NOT be disclosed to any other person. If you have disclosed your zpass, you should change it immediately.</li>
+  <li><strong>The use of AI assistants is strictly prohibited in this exam. This includes services such as Github Copilot and OpenAI ChatGPT.</strong><br>
+	  As a remark, I have personally pre-emptively fed the entire exam through ChatGPT.
+	  It has a very distinct linguistic flavour to its responses,
+	  and often incredibly confidently gives an entirely nonsensical answer.
+	  Please don't mistakenly believe you won't be caught if you opt to violate these conditions.
+</li></ul>
+
+<strong>
+  Deliberate violation of these exam conditions will be referred to Student Integrity Unit as
+  serious misconduct, which may result in penalties up to and including a mark of 0 in
+  COMP6991 and exclusion from UNSW.
+</strong>
+
+<ul>
+  <li>You are <strong>allowed</strong> to use any resources from the course during the exam.</li>
+  <li>You are <strong>allowed</strong> to use small amounts of code (&lt; 10 lines) of general-purpose code (not
+    specific to the exam) obtained from a site such as Stack Overflow or other publicly
+    available resources. You should attribute the source of this code clearly in an
+    accompanying comment.</li>
+</ul>
+
+<p>
+  Exam submissions will be checked, both automatically and manually, for any occurrences of
+  plagiarism.
+</p>
+
+<p>
+  <i>
+    By starting this exam, as a student of The University of New South Wales, you do solemnly and
+    sincerely declare that you have not seen any part of this specific examination paper for the
+    above course prior to attempting this exam, nor have any details of the exam's contents been
+    communicated to you. In addition, you will not disclose to any University student any
+    information contained in the abovementioned exam for a period of 24 hrs after the exam.
+    Violation of this agreement is considered Academic Misconduct and penalties may apply.
+  </i>
+</p>
+
+<p>
+  For more information, read the <a href="https://www.gs.unsw.edu.au/policy/documents/studentcodepolicy.pdf">UNSW Student Code</a>,
+  or contact the <a href="https://cgi.cse.unsw.edu.au/~cs6991/current/exam/cs6991@cse.unsw.edu.au">Course Account</a>.
+</p>
+
+<ul>
+  <li>This exam comes with starter files.</li>
+  <li>You will be able to commence the exam and fetch the files once the exam commences.</li>
+  <li>You may complete the exam questions using any platform you wish (VLab, VSCode, etc). You should ensure that the platform works correctly.</li>
+  <li>You may submit your answers, using the give command provided below each question.</li>
+  <li>You can use give to submit as many times as you wish. Only the last submission will be marked.</li>
+  <li>Do NOT leave it to the deadline to submit your answers. Submit each question when you finish working on it.</li>
+  <li>Please make sure that you submit all your answers at the conclusion of the exam - running the autotests does not automatically submit your code.</li>
+  <li>Autotests are available for all practical questions to assist in your testing. You can use the command: <code>6991 autotest</code></li>
+  <li>Passing autotests does not guarantee any marks. Remember to do your own testing!</li>
+  
+  <li>No marks are awarded for commenting - but you can leave comments for the marker to make your code more legible as needed</li>
+</ul>
+
+<h3>Language Restriction </h3>
+<ul>
+  <li>All programming questions must be answered entirely in Rust. You may not use any other programming languages.</li>
+  <li>You are not permitted to use third-party crates other than the standard library (std).</li>
+</ul>
+
+<h3>Fit to Sit</h3>
+
+<p>
+  By sitting or submitting an assessment on the scheduled assessment date, a student is declaring
+  that they are fit to do so and cannot later apply for Special Consideration.
+</p>
+
+<p>
+  If, during an exam a student feels unwell to the point that they cannot continue with the exam,
+  they should take the following steps:
+</p>
+
+<ol>
+  <li>Stop working on the exam and take note of the time</li>
+  <li>Contact us immediately, using cs6991.exam@cse.unsw.edu.au, and advise us that you are unwell</li>
+  <li>Immediately submit a Special Consideration application saying that you felt ill during the exam and were unable to continue</li>
+  <li>If you were able to advise us of the illness during the assessment (as above), attach screenshots of this conversation to the Special Consideration application</li>
+</ol>
+
+
+<h3>Technical Issues</h3>
+<p>
+  If you experience a technical issue, you should take the following steps:
+</p>
+
+<ol>
+  <li>If your issue is with the connection to CSE, please follow the following steps:</li>
+  <ul>
+    <li>
+      <b>If you are using VLab: </b>
+      Try exiting VLAB and reconnecting again - this may put you on a different server, which may improve your connection.
+      If you are still experiencing problems, you can try changing how you connect to the CSE servers. Consider:
+    </li>
+
+    <ul>
+      <li>
+        By using VSCode (with SSH-FS extension): <a href="https://www.cse.unsw.edu.au/~learn/homecomputing/vscode/">https://www.cse.unsw.edu.au/~learn/homecomputing/vscode/</a>
+      </li>
+      <li>
+        By using SSH: <a href="https://taggi.cse.unsw.edu.au/FAQ/Logging_In_With_SSH/">https://taggi.cse.unsw.edu.au/FAQ/Logging_In_With_SSH/</a>
+      </li>
+    </ul>
+
+
+    <li>
+      <b>If you are using VSCode remote-ssh: </b>
+      Try disconnecting VSCode, and then changing the URL from <code>vscode.unsw.edu.au</code> to <code>vscode2.unsw.edu.au</code>.
+    </li>
+    <li>
+      <b>If you are using SSH: </b>
+      Try disconnecting SSH and reconnecting again.
+    </li>
+  </ul>
+  <li>If things are still NOT working, take screenshots of as many of the following as possible:</li>
+  <ul>
+    <li>error messages</li>
+    <li>screen not loading</li>
+    <li>timestamped speed tests</li>
+    <li>power outage maps</li>
+  </ul>
+  <li>Contact should be made immediately to advise us of the issue at cs6991.exam@cse.unsw.edu.au</li>
+  <li>A Special Consideration application should be submitted immediately after the conclusion of the assessment, along with the appropriate screenshots.</li>
+</ol>
+
+
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+            
+            
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+        
+    
+        
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+</section>
+  
+    
+<section class="exercise">
+    <header><h3><small style="font-variant: small-caps; text-transform: lowercase;">
+    
+    
+    Exercise:
+</small>
+<br>Q1: Theory (10 marks)</h3></header>
+
+    
+
+    
+    
+    
+
+<h2>Q1.1 (3 marks)</h2>
+
+<strong>Question:</strong>
+<p>
+</p><ol>
+<li>Explain the difference between the <code>Option</code> and <code>Result</code> types. <em>(1 mark)</em>
+</li><li>Give an example of where each might be used. <em>(2 marks)</em>
+</li></ol>
+<p></p>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q1/q1_1.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q1_1 q1_1.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+<h2>Q1.2 (2 marks)</h2>
+
+<p>The following Rust code fails to compile, but equivalent code in
+  other popular programming languages (<abbr>e.g.</abbr> C, Java, Python)
+  compiles and/or works correctly.
+
+</p><pre style="background-color:#fafafa;"><span style="color:#fa6e32;">let</span><span style="color:#6e7580;"> i</span><span style="color:#6e7580cc;">: </span><span style="color:#fa6e32;">u32 </span><span style="color:#ed9366;">= </span><span style="color:#a37acc;">32</span><span style="color:#6e7580cc;">;
+</span><span style="color:#fa6e32;">let</span><span style="color:#6e7580;"> j</span><span style="color:#6e7580cc;">: </span><span style="color:#fa6e32;">i32 </span><span style="color:#ed9366;">= -</span><span style="color:#a37acc;">1</span><span style="color:#6e7580cc;">;
+</span><span style="color:#f07171;">println!</span><span style="color:#6e7580;">(</span><span style="color:#86b300;">"</span><span style="color:#a37acc;">{}</span><span style="color:#86b300;">"</span><span style="color:#6e7580cc;">,</span><span style="color:#6e7580;"> i </span><span style="color:#ed9366;">+</span><span style="color:#6e7580;"> j)</span><span style="color:#6e7580cc;">;
+</span></pre>
+
+
+<p><strong>Question:</strong>
+</p><p>
+</p><ol>
+<li>Explain what issue(s) prevent the Rust compiler from building this code <em>(1 mark)</em>.
+</li><li>Explain the philosophy behind this language decision <em>(1 mark)</em>.
+</li></ol>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q1/q1_2.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q1_2 q1_2.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+<h2>Q1.3 (2 marks)</h2>
+
+<p>
+  Your friend has asked you to teach them Rust. They think a great place to
+  begin would be your teaching them to write their own implementation of a
+  doubly-linked list (i.e. a list in which each node is stored on the heap,
+  with references to the previous node and the next node).
+
+</p><p><strong>Question:</strong>
+</p><p>
+  Give two reasons to explain why this is not a problem well-suited for Rust. <em>(1 mark per reason)</em>
+</p>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q1/q1_3.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q1_3 q1_3.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+<h2>Q1.4 (3 marks)</h2>
+
+<p>
+  A COMP6991 student has decided to build their own operating system in Rust.
+  When implementing the ability to open and read from files, they design these
+  functions based on how Linux deals with files.
+</p>
+
+<pre style="background-color:#fafafa;"><span style="font-style:italic;color:#abb0b6;">/// This function takes a path to a file; and a mutable reference to a `usize`.
+</span><span style="font-style:italic;color:#abb0b6;">/// If the file at `file_path` can be opened, the function will write a unique
+</span><span style="font-style:italic;color:#abb0b6;">/// `file_id` to the given mutable reference, and return 0. If the file cannot
+</span><span style="font-style:italic;color:#abb0b6;">/// be opened, the function will return an error code.
+</span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">open_file</span><span style="color:#6e7580;">(</span><span style="color:#a37acc;">file_path</span><span style="color:#6e7580cc;">: </span><span style="color:#ed9366;">&amp;</span><span style="color:#fa6e32;">str</span><span style="color:#6e7580;">, </span><span style="color:#a37acc;">file_id</span><span style="color:#6e7580cc;">: </span><span style="color:#ed9366;">&amp;</span><span style="color:#fa6e32;">mut usize</span><span style="color:#6e7580;">) </span><span style="color:#6e7580cc;">-&gt; </span><span style="color:#fa6e32;">usize</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="font-style:italic;color:#abb0b6;">/// This`function takes a `file_id` the user has already obtained, as well as a
+</span><span style="font-style:italic;color:#abb0b6;">/// `buffer` to write bytes to, and a `max_read_size`. The function tries to
+</span><span style="font-style:italic;color:#abb0b6;">/// copy `max_read_size` bytes into `buffer`. It returns the actual number of
+</span><span style="font-style:italic;color:#abb0b6;">/// bytes read. If there is an error, it returns a negative error code.
+</span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">read_file</span><span style="color:#6e7580;">(</span><span style="color:#a37acc;">file_id</span><span style="color:#6e7580cc;">: </span><span style="color:#fa6e32;">i32</span><span style="color:#6e7580;">, </span><span style="color:#a37acc;">buffer</span><span style="color:#6e7580cc;">: </span><span style="color:#ed9366;">&amp;</span><span style="color:#6e7580;">[</span><span style="color:#fa6e32;">u8</span><span style="color:#6e7580;">], </span><span style="color:#a37acc;">max_read_size</span><span style="color:#6e7580cc;">: </span><span style="color:#fa6e32;">usize</span><span style="color:#6e7580;">) </span><span style="color:#6e7580cc;">-&gt; </span><span style="color:#fa6e32;">i32</span><span style="color:#6e7580cc;">;
+</span></pre>
+
+
+<p><strong>Question:</strong>
+</p><p>
+  Identify three issues in this students plan (either with their design, or
+  their ability to implement their plan in Rust), and three accompanying Rust
+  features that could be used to fix them. <em>(1 mark per issue+fix)</em>
+</p>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q1/q1_4.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q1_4 q1_4.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+            
+            
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+        
+    
+        
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+</section>
+  
+    
+<section class="exercise">
+    <header><h3><small style="font-variant: small-caps; text-transform: lowercase;">
+    
+    
+    Exercise:
+</small>
+<br>Q2: Practical (10 marks)</h3></header>
+
+    
+
+    
+    
+    
+
+<p>
+  In this activity, you will be finding the differences between two rolls of people.
+  A COMP6991 tutor has collected two rolls of people, and wants to know who's unique
+  to the first one; who's unique to the second one; and who is on both lists.
+</p>
+
+<p>
+  You will be given two string references,
+  called <code>left</code> and <code>right</code>.
+  On each line is the name of a person.
+  For every person on the left roll, you should return
+  either <code>DiffResult::LeftOnly</code> or <code>DiffResult::Both</code>
+  containing a string reference to that line, depending on whether they're in
+  the right list also. For every person on the right roll, you should
+  return <code>DiffResult::RightOnly</code> containing a reference to that line
+  if they are not in the left roll.
+  You can assume that the people on any <em>single</em> roll are unique.
+  That is, you won't see two of the same person on the left roll,
+  nor two of the same person on the right roll.
+</p>
+<p>
+  Before returning, you should sort your list of differences alphabetically by their names.
+  Note that since <code>DiffResult</code> derives <code>PartialOrd + Ord</code>,
+  you should simply be able to call <code>.sort()</code> on your final <code>Vec</code>.
+</p>
+<p>
+  You have been given starter code which does not yet compile. Your task is to
+  fill in both <code>todo!()</code> statements, as well as to modify the
+  lifetimes where required in order to build your code.
+</p>
+
+<p>
+  You are <strong>not permitted</strong> to change the return type of functions,
+  the names of structs, or the types of structs.
+  You may also not change the main function,
+  and you should expect that the main function will be changed during testing.
+  Specifically, the main function could be changed to
+  extract <code>DiffResult::RightOnly</code> or <code>DiffResult::Both</code>.
+  You will, however, have to add or modify lifetimes to existing types in order
+  to successfully compile your code.
+</p>
+
+<p>
+  This is an example of the expected behaviour:
+</p>
+
+<pre is="tty"><kbd is="sh">6991 cargo run test_data/test_data.txt</kbd>
+    Finished dev [unoptimized + debuginfo] target(s) in 0.36s
+     Running `target/debug/prac_q2`
+<kbd><span style="font-weight: normal"># Roll 1</span>
+Tom
+Shrey
+Zac
+Hailey
+Toby
+Barry
+Netanya
+
+<span style="font-weight: normal"># Roll 2</span>
+Tom
+Shrey
+Hailey
+<span class="eof"></span></kbd>
+Left Only: Barry
+Left Only: Netanya
+Left Only: Toby
+Left Only: Zac
+</pre>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q2/src/lib.rs</code>.
+
+</p><p>
+When you think your program is working,
+you can use <code>autotest</code>
+to run some simple automated tests:
+
+</p><pre is="tty"><kbd is="sh">6991 autotest</kbd>
+</pre>
+
+<p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q2 lib.rs</kbd>
+</pre>
+
+<br>
+<br>
+
+
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+            
+            
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+        
+    
+        
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+</section>
+  
+    
+<section class="exercise">
+    <header><h3><small style="font-variant: small-caps; text-transform: lowercase;">
+    
+    
+    Exercise:
+</small>
+<br>Q3: Practical (10 marks)</h3></header>
+
+    
+
+    
+    
+    
+
+<p>
+    In this task, you will build a data-structure, called a "DBMap".
+    This type will wrap a Vec of tuples, of the form <code>(key, value)</code>.
+    Currently, the type only works for tuples of the form <code>(i32, &amp;'static str)</code>,
+    however you will need to modify this so it works for any tuples where the key is <code>Eq</code>.
+    Your task is to make this struct generic over all valid types for both its keys and values,
+    then to implement a method on this data-structure.
+</p>
+
+<p>
+    The method you will implement is called <code>merge</code>. It should take ownership of
+    two <code>DBMap</code>s with the same type of key, and then return a new DBMap with its values being tuples.
+    To describe the algorithm merge uses, we will call one of the <code>DBMap</code>s <code>self</code>,
+    and one of them <code>other</code>.
+</p>
+<p>
+    To create the new <code>DBMap</code>, you should iterate over each element in <code>self</code>.
+    We will call these <code>key</code> and <code>value</code>
+    You should then try to find the first element in <code>other</code> with an equal key. We will call that
+    <code>other_value</code>. You should insert <code>(key, (value, Some(other_value)))</code> into the new <code>DBMap</code>.
+    If you cannot find a matching value in <code>other</code>, you should insert <code>(key, (value, None))</code>
+    into the new <code>DBMap</code>.
+</p>
+<p>
+    Your implementation should be generic, such that the key is any
+    type which supports equality checking; and the value is any type.
+</p>
+<p>
+    Your implementation should compile with both the main functions provided,
+    however you should assume that more main functions may be tested during marking.
+</p>
+<p>
+    You may assume that any <strong>one individual <code>DBMap</code></strong>
+    will be comprised of totally unique keys.
+</p>
+<p>
+    An example of a merge is shown below:
+</p>
+
+<div class="row">
+    <div class="col-4">
+        <p>Stock Prices</p>
+        <table class="table">
+            <tbody><tr>
+                <td>Key</td>
+                <td>Value</td>
+            </tr>
+            <tr>
+                <td>Apples</td>
+                <td>3.5</td>
+            </tr>
+            <tr>
+                <td>Pears</td>
+                <td>4.5</td>
+            </tr>
+            <tr>
+                <td>Caviar</td>
+                <td>200</td>
+            </tr>
+        </tbody></table>
+    </div>
+    <div class="col-4">
+        <p>Stock Quantity</p>
+        <table class="table">
+            <tbody><tr>
+                <td>Key</td>
+                <td>Value</td>
+            </tr>
+            <tr>
+                <td>Pears</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>Apples</td>
+                <td>100</td>
+            </tr>
+            <tr>
+                <td>Peaches</td>
+                <td>200</td>
+            </tr>
+        </tbody></table>
+    </div>
+    <div class="col-4">
+        <p>Merge of Stock Prices and Quantity</p>
+        <table class="table">
+            <tbody><tr>
+                <td>Key</td>
+                <td>Value</td>
+            </tr>
+            <tr>
+                <td>Apples</td>
+                <td>(3.5, Some(100))</td>
+            </tr>
+            <tr>
+                <td>Pears</td>
+                <td>(4.5, Some(50))</td>
+            </tr>
+            <tr>
+                <td>Caviar</td>
+                <td>(200, None)</td>
+            </tr>
+        </tbody></table>
+    </div>
+</div>
+
+For example,
+
+<pre is="tty"><kbd is="sh">6991 cargo run</kbd>
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
+     Running `target/debug/exam_q3`
+#1: Max Verstappen (Red Bull Racing)
+#3: Daniel Riccardo (None)
+#4: Lando Norris (McLaren)
+#5: Sebastian Vettel (None)
+#6: Nicholas Latifi (None)
+#7: Kimi Räikkönen (None)
+#9: Nikita Mazepin (None)
+#11: Sergio Pérez (Red Bull Racing)
+</pre>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q3/src/lib.rs</code>.
+
+</p><p>
+When you think your program is working,
+you can use <code>autotest</code>
+to run some simple automated tests:
+
+</p><pre is="tty"><kbd is="sh">6991 autotest</kbd>
+</pre>
+
+<p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q3 lib.rs</kbd>
+</pre>
+
+<br>
+<br>
+
+
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+            
+            
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+        
+    
+        
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+</section>
+  
+    
+<section class="exercise">
+    <header><h3><small style="font-variant: small-caps; text-transform: lowercase;">
+    
+    
+    Exercise:
+</small>
+<br>Q4: Theory (10 marks)</h3></header>
+
+    
+
+    
+    
+    
+
+<h2>Q4.1 (2 marks)</h2>
+
+<p>
+  Therese is writing a library to help sell her car.
+  The library defines a <code>Car</code> trait as follows:
+
+  </p><pre style="background-color:#fafafa;"><span style="color:#fa6e32;">trait </span><span style="color:#399ee6;">Car </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">get_price</span><span style="color:#6e7580;">(</span><span style="color:#ed9366;">&amp;</span><span style="color:#a37acc;">self</span><span style="color:#6e7580;">) </span><span style="color:#6e7580cc;">-&gt; </span><span style="color:#fa6e32;">u32</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">}
+</span></pre>
+
+
+  Users of the library will create their own structs which represent specific
+  cars by implementing the <code>Car</code> trait.
+  As seen in the trait definition, all <code>Cars</code> have a price.
+
+<p></p>
+<p>
+  Therese wants to write a function to total the cost of all the cars in a slice.
+  As she wants this to work for any models of <code>Car</code>,
+  she considers two potential approaches:
+</p>
+
+<pre style="background-color:#fafafa;"><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">get_total_price</span><span style="color:#6e7580;">&lt;C</span><span style="color:#6e7580cc;">:</span><span style="color:#6e7580;"> Car&gt;(</span><span style="color:#a37acc;">cars</span><span style="color:#6e7580cc;">: </span><span style="color:#ed9366;">&amp;</span><span style="color:#6e7580;">[C]) </span><span style="color:#6e7580cc;">-&gt; </span><span style="color:#fa6e32;">u32</span><span style="color:#6e7580cc;">;
+</span></pre>
+
+
+and
+
+<pre style="background-color:#fafafa;"><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">get_total_price</span><span style="color:#6e7580;">(</span><span style="color:#a37acc;">cars</span><span style="color:#6e7580cc;">: </span><span style="color:#ed9366;">&amp;</span><span style="color:#6e7580;">[Box&lt;dyn Car&gt;]) </span><span style="color:#6e7580cc;">-&gt; </span><span style="color:#fa6e32;">u32</span><span style="color:#6e7580cc;">;
+</span></pre>
+
+
+<strong>Question:</strong>
+<p>
+</p><ol>
+<li>Explain the difference between the two approaches. <em>(1 mark)</em>
+</li><li>Give one reason why Therese might choose each approach. <em>(1 mark)</em>
+</li></ol>
+<p></p>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q4/q4_1.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q4_1 q4_1.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+
+<h2>Q4.2 (2 marks)</h2>
+
+<p>
+  Daniel is trying to design a function that counts the number
+  of whitespace characters in some text.
+
+  He starts with the first design...
+  </p><pre style="background-color:#fafafa;"><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">number_of_whitespace_chars</span><span style="color:#6e7580;">(</span><span style="color:#a37acc;">string</span><span style="color:#6e7580cc;">:</span><span style="color:#6e7580;"> String) </span><span style="color:#6e7580cc;">-&gt; </span><span style="color:#fa6e32;">usize </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">    string.</span><span style="color:#f07171;">chars</span><span style="color:#6e7580;">()
+</span><span style="color:#6e7580;">        .</span><span style="color:#f07171;">filter</span><span style="color:#6e7580;">(</span><span style="color:#fa6e32;">char</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">is_whitespace)
+</span><span style="color:#6e7580;">        .</span><span style="color:#f07171;">count</span><span style="color:#6e7580;">()
+</span><span style="color:#6e7580;">}
+</span></pre>
+
+  ... and submits this for code review.
+
+  Another software engineer on his team suggests the following change...
+  <pre style="background-color:#fafafa;"><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">number_of_whitespace_chars</span><span style="color:#6e7580;">(</span><span style="color:#a37acc;">string</span><span style="color:#6e7580cc;">: </span><span style="color:#ed9366;">&amp;</span><span style="color:#fa6e32;">str</span><span style="color:#6e7580;">) </span><span style="color:#6e7580cc;">-&gt; </span><span style="color:#fa6e32;">usize </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">    string.</span><span style="color:#f07171;">chars</span><span style="color:#6e7580;">()
+</span><span style="color:#6e7580;">        .</span><span style="color:#f07171;">filter</span><span style="color:#6e7580;">(</span><span style="color:#fa6e32;">char</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">is_whitespace)
+</span><span style="color:#6e7580;">        .</span><span style="color:#f07171;">count</span><span style="color:#6e7580;">()
+</span><span style="color:#6e7580;">}
+</span></pre>
+
+  ... which Daniel accepts and resubmits.
+
+  Finally, a senior engineer suggests a further change:
+  <pre style="background-color:#fafafa;"><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">number_of_whitespace_chars</span><span style="color:#6e7580;">&lt;T</span><span style="color:#6e7580cc;">: </span><span style="color:#6e7580;">AsRef&lt;</span><span style="color:#fa6e32;">str</span><span style="color:#6e7580;">&gt;&gt;(</span><span style="color:#a37acc;">t</span><span style="color:#6e7580cc;">:</span><span style="color:#6e7580;"> T) </span><span style="color:#6e7580cc;">-&gt; </span><span style="color:#fa6e32;">usize </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">    t.</span><span style="color:#f07171;">as_ref</span><span style="color:#6e7580;">()
+</span><span style="color:#6e7580;">        .</span><span style="color:#f07171;">chars</span><span style="color:#6e7580;">()
+</span><span style="color:#6e7580;">        .</span><span style="color:#f07171;">filter</span><span style="color:#6e7580;">(</span><span style="color:#fa6e32;">char</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">is_whitespace)
+</span><span style="color:#6e7580;">        .</span><span style="color:#f07171;">count</span><span style="color:#6e7580;">()
+</span><span style="color:#6e7580;">}
+</span></pre>
+
+
+<p>
+<strong>Question:</strong>
+</p><p>
+</p><ol>
+<li>Why is the first suggested change an improvement on Daniel's original design? <em>(1 mark)</em>
+</li><li>Why is the second suggested change an improvement on the second design? <em>(1 mark)</em>
+</li></ol>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q4/q4_2.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q4_2 q4_2.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+
+<h2>Q4.3 (3 marks)</h2>
+
+Olivia is working on a roll-call system to help take
+attendance at a class she teaches.
+She writes the following code:
+
+<pre style="background-color:#fafafa;"><span style="color:#fa6e32;">trait </span><span style="color:#399ee6;">IntoRollCall </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">into_roll_call</span><span style="color:#6e7580;">(</span><span style="color:#a37acc;">self</span><span style="color:#6e7580;">) </span><span style="color:#6e7580cc;">-&gt;</span><span style="color:#6e7580;"> String</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">}
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">struct </span><span style="color:#399ee6;">UnswStudent </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">    name</span><span style="color:#6e7580cc;">:</span><span style="color:#6e7580;"> String,
+</span><span style="color:#6e7580;">    zid</span><span style="color:#6e7580cc;">: </span><span style="color:#fa6e32;">u32</span><span style="color:#6e7580;">,
+</span><span style="color:#6e7580;">}
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">impl </span><span style="color:#6e7580;">IntoRollCall </span><span style="color:#fa6e32;">for </span><span style="color:#399ee6;">UnswStudent </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">into_roll_call</span><span style="color:#6e7580;">(</span><span style="color:#a37acc;">self</span><span style="color:#6e7580;">) </span><span style="color:#6e7580cc;">-&gt;</span><span style="color:#6e7580;"> String {
+</span><span style="color:#6e7580;">        </span><span style="color:#fa6e32;">let Self </span><span style="color:#6e7580;">{ name</span><span style="color:#6e7580cc;">,</span><span style="color:#6e7580;"> zid } </span><span style="color:#ed9366;">= </span><span style="font-style:italic;color:#55b4d4;">self</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">        </span><span style="color:#f07171;">format!</span><span style="color:#6e7580;">(</span><span style="color:#86b300;">"</span><span style="color:#a37acc;">{name}</span><span style="color:#86b300;"> z</span><span style="color:#a37acc;">{zid}</span><span style="color:#86b300;">"</span><span style="color:#6e7580;">)
+</span><span style="color:#6e7580;">    }
+</span><span style="color:#6e7580;">}
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">call_roll</span><span style="color:#6e7580;">(</span><span style="color:#a37acc;">students</span><span style="color:#6e7580cc;">: </span><span style="color:#6e7580;">Vec&lt;Box&lt;dyn IntoRollCall&gt;&gt;) {
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">for</span><span style="color:#6e7580;"> student </span><span style="color:#ed9366;">in</span><span style="color:#6e7580;"> students.</span><span style="color:#f07171;">into_iter</span><span style="color:#6e7580;">() {
+</span><span style="color:#6e7580;">        </span><span style="color:#f07171;">println!</span><span style="color:#6e7580;">(</span><span style="color:#86b300;">"</span><span style="color:#a37acc;">{}</span><span style="color:#86b300;">"</span><span style="color:#6e7580cc;">,</span><span style="color:#6e7580;"> student.</span><span style="color:#f07171;">into_roll_call</span><span style="color:#6e7580;">())</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">    }
+</span><span style="color:#6e7580;">}
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">main</span><span style="color:#6e7580;">() {
+</span><span style="color:#6e7580;">    </span><span style="color:#f07171;">call_roll</span><span style="color:#6e7580;">(</span><span style="color:#f07171;">vec!</span><span style="color:#6e7580;">[
+</span><span style="color:#6e7580;">        </span><span style="font-style:italic;color:#55b4d4;">Box</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">new(UnswStudent { name</span><span style="color:#6e7580cc;">: </span><span style="font-style:italic;color:#55b4d4;">String</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">from(</span><span style="color:#86b300;">"Alice"</span><span style="color:#6e7580;">)</span><span style="color:#6e7580cc;">,</span><span style="color:#6e7580;">   zid</span><span style="color:#6e7580cc;">: </span><span style="color:#a37acc;">5000000 </span><span style="color:#6e7580;">})</span><span style="color:#6e7580cc;">,
+</span><span style="color:#6e7580;">        </span><span style="font-style:italic;color:#55b4d4;">Box</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">new(UnswStudent { name</span><span style="color:#6e7580cc;">: </span><span style="font-style:italic;color:#55b4d4;">String</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">from(</span><span style="color:#86b300;">"Bertie"</span><span style="color:#6e7580;">)</span><span style="color:#6e7580cc;">,</span><span style="color:#6e7580;">  zid</span><span style="color:#6e7580cc;">: </span><span style="color:#a37acc;">5000001 </span><span style="color:#6e7580;">})</span><span style="color:#6e7580cc;">,
+</span><span style="color:#6e7580;">        </span><span style="font-style:italic;color:#55b4d4;">Box</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">new(UnswStudent { name</span><span style="color:#6e7580cc;">: </span><span style="font-style:italic;color:#55b4d4;">String</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">from(</span><span style="color:#86b300;">"Candice"</span><span style="color:#6e7580;">)</span><span style="color:#6e7580cc;">,</span><span style="color:#6e7580;"> zid</span><span style="color:#6e7580cc;">: </span><span style="color:#a37acc;">5000002 </span><span style="color:#6e7580;">})</span><span style="color:#6e7580cc;">,
+</span><span style="color:#6e7580;">    ])</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">}
+</span></pre>
+
+
+Although there is currently only one implementor of <code>IntoRollCall</code>,
+she plans to soon add more implementors for other schools.
+
+<p>
+However, when she attempts to compile the code,
+she gets a confusing error:
+
+</p><pre is="tty"><kbd is="sh">rustc my_program.rs</kbd>
+<span style="font-weight: bold"><span style="color: red">error[E0161]</span>: cannot move a value of type `dyn IntoRollCall`</span>
+<span style="font-weight: bold; color: cadetblue">  --&gt;</span> my_program.rs:19:24
+<span style="font-weight: bold; color: cadetblue">   |</span>
+<span style="font-weight: bold; color: cadetblue">19 |</span>         println!("{}", student.into_roll_call());
+<span style="font-weight: bold; color: cadetblue">   |</span>                        <span style="font-weight: bold; color: red">^^^^^^^^^^^^^^^^^^^^^^^^ the size of `dyn IntoRollCall` cannot be statically determined</span>
+
+<span style="font-weight: bold"><span style="color: red">error</span>: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0161`.</span>
+</pre>
+
+<p>
+<strong>Question:</strong>
+</p><p>
+</p><ol>
+<li>Explain the reasoning behind this error message,
+    with specific reference to the requirements of trait objects. <em>(2 marks)</em>
+</li><li>Identify a simple solution to fix Olivia's program. <em>(1 mark)</em>
+</li></ol>
+<p></p>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q4/q4_3.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q4_3 q4_3.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+<h2>Q4.4 (3 marks)</h2>
+
+<p>
+  Patel does not think Rust's generics system is that special. He claims he can write
+  his own macro which does everything that Rust's generics system can do.
+</p>
+<p>
+  His macro, and an example of him using it, is shown below.
+</p>
+
+<pre style="background-color:#fafafa;"><span style="color:#f07171;">macro_rules! </span><span style="color:#399ee6;">generic </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">    (</span><span style="color:#ed9366;">$</span><span style="color:#6e7580;">($name:ident = $type:ty),</span><span style="color:#ed9366;">+</span><span style="color:#6e7580;">; fn </span><span style="color:#a37acc;">$fn_name</span><span style="color:#6e7580cc;">:</span><span style="color:#fa6e32;">ident</span><span style="color:#6e7580;">(</span><span style="color:#ed9366;">$</span><span style="color:#6e7580;">($arg_name:ident: $arg_type:ty),</span><span style="color:#ed9366;">* </span><span style="color:#6e7580;">) -&gt; $return_type:ty $blk:block) </span><span style="color:#ed9366;">=&gt; </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">        </span><span style="color:#ed9366;">$</span><span style="color:#6e7580;">(</span><span style="color:#fa6e32;">type </span><span style="color:#6e7580;">$name </span><span style="color:#ed9366;">= </span><span style="color:#6e7580;">$type)</span><span style="color:#6e7580cc;">;</span><span style="color:#ed9366;">+</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">        </span><span style="color:#fa6e32;">fn </span><span style="color:#6e7580;">$fn_name(</span><span style="color:#ed9366;">$</span><span style="color:#6e7580;">($arg_name</span><span style="color:#6e7580cc;">: </span><span style="color:#6e7580;">$arg_type)</span><span style="color:#6e7580cc;">,</span><span style="color:#ed9366;">*</span><span style="color:#6e7580;">) </span><span style="color:#6e7580cc;">-&gt; </span><span style="color:#6e7580;">$return_type {
+</span><span style="color:#6e7580;">            $blk
+</span><span style="color:#6e7580;">        }
+</span><span style="color:#6e7580;">    }
+</span><span style="color:#6e7580;">}
+</span><span style="color:#6e7580;">
+</span><span style="color:#f07171;">generic!</span><span style="color:#6e7580;">(I </span><span style="color:#ed9366;">= </span><span style="color:#fa6e32;">i32</span><span style="color:#6e7580cc;">,</span><span style="color:#6e7580;"> O </span><span style="color:#ed9366;">= </span><span style="font-style:italic;color:#55b4d4;">String</span><span style="color:#6e7580cc;">; </span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">add</span><span style="color:#6e7580;">(</span><span style="color:#a37acc;">a</span><span style="color:#6e7580cc;">:</span><span style="color:#6e7580;"> I, </span><span style="color:#a37acc;">b</span><span style="color:#6e7580cc;">:</span><span style="color:#6e7580;"> I) </span><span style="color:#6e7580cc;">-&gt;</span><span style="color:#6e7580;"> O {
+</span><span style="color:#6e7580;">    </span><span style="color:#f07171;">format!</span><span style="color:#6e7580;">(</span><span style="color:#86b300;">"</span><span style="color:#a37acc;">{}</span><span style="color:#86b300;">"</span><span style="color:#6e7580cc;">,</span><span style="color:#6e7580;"> a </span><span style="color:#ed9366;">+</span><span style="color:#6e7580;"> b)
+</span><span style="color:#6e7580;">})</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">main</span><span style="color:#6e7580;">() {
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">let</span><span style="color:#6e7580;"> a</span><span style="color:#6e7580cc;">: </span><span style="color:#fa6e32;">i32 </span><span style="color:#ed9366;">= </span><span style="color:#a37acc;">1</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">let</span><span style="color:#6e7580;"> b</span><span style="color:#6e7580cc;">: </span><span style="color:#fa6e32;">i32 </span><span style="color:#ed9366;">= </span><span style="color:#a37acc;">1</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">    </span><span style="color:#f07171;">println!</span><span style="color:#6e7580;">(</span><span style="color:#86b300;">"</span><span style="color:#a37acc;">{}</span><span style="color:#86b300;">"</span><span style="color:#6e7580cc;">, </span><span style="color:#f07171;">add</span><span style="color:#6e7580;">(a</span><span style="color:#6e7580cc;">,</span><span style="color:#6e7580;"> b))</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">}
+</span></pre>
+
+
+<p>
+<strong>Question:</strong>
+</p><p>
+  Explain to Patel three features of Rust's macro system which his macro does not
+  implement, with explicit reference to an example of how
+  his system would have to implement it. <em>(1 mark per feature)</em>
+</p>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q4/q4_4.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q4_4 q4_4.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+            
+            
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+        
+    
+        
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+</section>
+  
+    
+<section class="exercise">
+    <header><h3><small style="font-variant: small-caps; text-transform: lowercase;">
+    
+    
+    Exercise:
+</small>
+<br>Q5: Theory (10 marks)</h3></header>
+
+    
+
+    
+    
+    
+
+
+<h2>Q5.1 (3 marks)</h2>
+
+<p>
+  The following code attempts to creates multiple threads
+  which each increment an <code>i32</code> protected by a <code>Mutex</code> by one.
+</p>
+
+<pre style="background-color:#fafafa;"><span style="color:#fa6e32;">use </span><span style="color:#6e7580;">std</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">thread</span><span style="color:#6e7580cc;">;
+</span><span style="color:#fa6e32;">use </span><span style="color:#6e7580;">std</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">sync</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">Mutex</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">main</span><span style="color:#6e7580;">() {
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">let</span><span style="color:#6e7580;"> mutex</span><span style="color:#6e7580cc;">: </span><span style="color:#6e7580;">Mutex&lt;</span><span style="color:#fa6e32;">i32</span><span style="color:#6e7580;">&gt; </span><span style="color:#ed9366;">= </span><span style="color:#6e7580;">Mutex</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">new(</span><span style="color:#a37acc;">0</span><span style="color:#6e7580;">)</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">    thread</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">scope(|</span><span style="color:#a37acc;">scope</span><span style="color:#6e7580;">| {
+</span><span style="color:#6e7580;">        </span><span style="color:#fa6e32;">for </span><span style="color:#ed9366;">_ in </span><span style="color:#a37acc;">0</span><span style="color:#ed9366;">..</span><span style="color:#a37acc;">3 </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">            </span><span style="color:#fa6e32;">let mut</span><span style="color:#6e7580;"> i </span><span style="color:#ed9366;">=</span><span style="color:#6e7580;"> mutex.</span><span style="color:#f07171;">lock</span><span style="color:#6e7580;">().</span><span style="color:#f07171;">unwrap</span><span style="color:#6e7580;">()</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">            scope.</span><span style="color:#f07171;">spawn</span><span style="color:#6e7580;">(</span><span style="color:#fa6e32;">move </span><span style="color:#ed9366;">|| </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">                </span><span style="color:#ed9366;">*</span><span style="color:#6e7580;">i </span><span style="color:#ed9366;">+= </span><span style="color:#a37acc;">1</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">            })</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">        }
+</span><span style="color:#6e7580;">    })</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">    </span><span style="color:#f07171;">println!</span><span style="color:#6e7580;">(</span><span style="color:#86b300;">"</span><span style="color:#a37acc;">{}</span><span style="color:#86b300;">"</span><span style="color:#6e7580cc;">, </span><span style="color:#ed9366;">*</span><span style="color:#6e7580;">mutex.</span><span style="color:#f07171;">lock</span><span style="color:#6e7580;">().</span><span style="color:#f07171;">unwrap</span><span style="color:#6e7580;">())</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">}
+</span></pre>
+
+
+<p>However, there is a mistake in this code.
+   Fortunately, it is caught by the Rust compiler
+   instead of causing a crash or undefined behaviour at runtime.
+
+</p><p>
+<strong>Question:</strong>
+</p><p>
+</p><ol>
+<li>Explain how the Rust compiler knows
+    (statically, at compile time)
+    that <code>i</code> cannot be sent across threads. <em>(1 mark)</em>
+</li><li>Explain how you would change the code to compile,
+    while maintaining the behaviour that each thread
+    increments the <code>i32</code> by exactly one. <em>(1 mark)</em>
+</li><li>Explain why your change fixes the issue. <em>(1 mark)</em>
+</li></ol>
+<p></p>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q5/q5_1.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q5_1 q5_1.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+<h2>Q5.2 (2 marks)</h2>
+
+<p>
+<strong>Question:</strong>
+</p><p>
+</p><ol>
+<li>Identify a type that should never be marked as <code>Sync</code>. <em>(1 mark)</em>
+</li><li>Explain why that type should never be marked as <code>Sync</code>. <em>(1 mark)</em>
+</li></ol>
+<p></p>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q5/q5_2.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q5_2 q5_2.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+<h2>Q5.3 (3 marks)</h2>
+
+<p>
+  Zain claims on the course forum
+  that Rust makes concurrency impossible to get wrong.
+</p>
+
+<p>
+  However, the next post shows a student struggling
+  with their concurrent code:
+
+</p><pre style="background-color:#fafafa;"><span style="color:#fa6e32;">use </span><span style="color:#6e7580;">std</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">thread</span><span style="color:#6e7580cc;">;
+</span><span style="color:#fa6e32;">use </span><span style="color:#6e7580;">std</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">sync</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">{Mutex</span><span style="color:#6e7580cc;">,</span><span style="color:#6e7580;"> Arc}</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">main</span><span style="color:#6e7580;">() {
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">let</span><span style="color:#6e7580;"> mutex</span><span style="color:#6e7580cc;">: </span><span style="color:#6e7580;">Arc&lt;Mutex&lt;Vec&lt;</span><span style="color:#fa6e32;">i32</span><span style="color:#6e7580;">&gt;&gt;&gt; </span><span style="color:#ed9366;">= </span><span style="color:#6e7580;">Arc</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">new(Mutex</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">new(</span><span style="font-style:italic;color:#55b4d4;">Vec</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">new()))</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">for </span><span style="color:#ed9366;">_ in </span><span style="color:#a37acc;">0</span><span style="color:#ed9366;">..</span><span style="color:#a37acc;">3 </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">        </span><span style="color:#fa6e32;">let</span><span style="color:#6e7580;"> mutex_clone </span><span style="color:#ed9366;">=</span><span style="color:#6e7580;"> mutex.</span><span style="color:#f07171;">clone</span><span style="color:#6e7580;">()</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">        thread</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">spawn(</span><span style="color:#fa6e32;">move </span><span style="color:#ed9366;">|| </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">            {
+</span><span style="color:#6e7580;">                </span><span style="font-style:italic;color:#abb0b6;">// Push 1 to the end of the vec...
+</span><span style="color:#6e7580;">                </span><span style="color:#fa6e32;">let mut</span><span style="color:#6e7580;"> vector </span><span style="color:#ed9366;">=</span><span style="color:#6e7580;"> mutex_clone.</span><span style="color:#f07171;">lock</span><span style="color:#6e7580;">().</span><span style="color:#f07171;">unwrap</span><span style="color:#6e7580;">()</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">                vector.</span><span style="color:#f07171;">push</span><span style="color:#6e7580;">(</span><span style="color:#a37acc;">1</span><span style="color:#6e7580;">)</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">            }
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">            {
+</span><span style="color:#6e7580;">                </span><span style="font-style:italic;color:#abb0b6;">// ... then increment that element by 1.
+</span><span style="color:#6e7580;">                </span><span style="color:#fa6e32;">let mut</span><span style="color:#6e7580;"> vector </span><span style="color:#ed9366;">=</span><span style="color:#6e7580;"> mutex_clone.</span><span style="color:#f07171;">lock</span><span style="color:#6e7580;">().</span><span style="color:#f07171;">unwrap</span><span style="color:#6e7580;">()</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">                </span><span style="color:#fa6e32;">let</span><span style="color:#6e7580;"> index </span><span style="color:#ed9366;">=</span><span style="color:#6e7580;"> vector.</span><span style="color:#f07171;">len</span><span style="color:#6e7580;">() </span><span style="color:#ed9366;">- </span><span style="color:#a37acc;">1</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">                vector[index] </span><span style="color:#ed9366;">+= </span><span style="color:#a37acc;">1</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">            }
+</span><span style="color:#6e7580;">        })</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">    }
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">    </span><span style="font-style:italic;color:#abb0b6;">// NOTE: this code makes it work better for some reason???
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">for </span><span style="color:#ed9366;">_ in </span><span style="color:#a37acc;">0</span><span style="color:#ed9366;">..</span><span style="color:#a37acc;">2000 </span><span style="color:#6e7580;">{}
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">    </span><span style="color:#f07171;">println!</span><span style="color:#6e7580;">(</span><span style="color:#86b300;">"</span><span style="color:#a37acc;">{:?}</span><span style="color:#86b300;">"</span><span style="color:#6e7580cc;">, </span><span style="color:#ed9366;">*</span><span style="color:#6e7580;">mutex.</span><span style="color:#f07171;">lock</span><span style="color:#6e7580;">().</span><span style="color:#f07171;">unwrap</span><span style="color:#6e7580;">())</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">}
+</span></pre>
+
+
+<p>
+<strong>Question:</strong>
+</p><p>
+</p><ol>
+<li>Explain two concurrency issues with the student's code. <em>(1 mark per issue)</em>
+</li><li>Discuss to what extent you agree with Zain's claim. <em>(1 mark)</em>
+</li></ol>
+<p></p>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q5/q5_3.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q5_3 q5_3.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+
+<h2>Q5.4 (2 marks)</h2>
+
+<p>
+<strong>Question:</strong>
+</p><p>
+</p><ol>
+<li>Analyse two Rust features which the
+    <a href="https://docs.rs/rayon" target="_blank">Rayon crate</a>
+    is able to take advantage of in order to
+    provide static (<abbr>i.e.</abbr> compile-time)
+    guarantees as to the safety of a parallel computation.
+    
+    Ensure to explain both the Rust feature,
+    and <em>how</em> it allows Rayon to provide
+    such guarantees. <em>(1 mark per feature)</em>
+</li></ol>
+<p></p>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q5/q5_4.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q5_4 q5_4.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+            
+            
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+        
+    
+        
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+</section>
+  
+    
+<section class="exercise">
+    <header><h3><small style="font-variant: small-caps; text-transform: lowercase;">
+    
+    
+    Exercise:
+</small>
+<br>Q6: Practical (10 marks)</h3></header>
+
+    
+
+    
+    
+    
+
+<p>
+    In this exercise, we will be making some mathematical operations occur in
+    parallel. You have been given the code to calculate the factors of a number,
+    and to find common factors between two numbers. This code is quite slow,
+    as it only executes on a single thread.
+</p>
+<p>
+    Your task is to parallelise the code in your main function. You can use any
+    concurrency tools within the standard library, but you <b>must not</b> use
+    Rayon, or any other non-standard crates. You must not change any code outside
+    the <code>main.rs</code> file.
+</p>
+<p>
+    You will receive full marks if you can ensure that (theoretically), all calls
+    to <code>get_factors</code> could run simultaneously; and seperately that
+    all calls to <code>get_common_factors</code> could run simultaneously.
+</p>
+<p>
+	You should <strong>not</strong> put a constant limit on the number of threads
+	you spawn (<abbr>i.e.</abbr>, do not use thread-pooling).
+	We suggest that you spawn a new thread for each <code>get_factors</code>
+	call, and a new thread for each <code>get_common_factors</code> call.
+</p>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q6/src/main.rs</code>.
+
+</p><p>
+When you think your program is working,
+you can use <code>autotest</code>
+to run some simple automated tests:
+
+</p><pre is="tty"><kbd is="sh">6991 autotest</kbd>
+</pre>
+
+<p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q6 main.rs</kbd>
+</pre>
+
+<br>
+<br>
+
+
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+            
+            
+        
+      
+        
+      
+        
+      
+    
+
+    
+        
+    
+        
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+</section>
+  
+    
+<section class="exercise">
+    <header><h3><small style="font-variant: small-caps; text-transform: lowercase;">
+    
+    
+    Exercise:
+</small>
+<br>Q7: Theory (10 marks)</h3></header>
+
+    
+
+    
+    
+    
+
+
+<h2>Q7.1 (5 marks)</h2>
+
+<p>
+	Larry is trying to implement a difficult data structure in Rust,
+	and is running into some issues with the borrow checker.
+
+</p><p>
+	Steven, noticing Larry's struggle, offers some unsolicited advice:
+	"Just use <code>unsafe</code>, it disables the borrow checker
+	and the rest of the other safety checks."
+
+</p><p>
+	Stephanie overhears the advice and retorts:
+	"It's more complicated than that.
+	Maybe you should rethink your ownership model
+	before resorting to <code>unsafe</code>."
+</p>
+
+<p>
+<strong>Question:</strong>
+	</p><ol>
+		<li>Which safety checks does <code>unsafe</code>
+			code opt-out of? <em>(1 mark)</em>
+
+		</li><li>How and why might <code>unsafe</code>
+			be a useful tool
+			for resolving borrow-checking issues
+			when writing, for example,
+			a complex data structure
+			in Rust? <em>(2 marks)</em>
+
+		</li><li>Explain why using <code>unsafe</code> is
+			not always the optimal solution in a case
+			like this, and what procedures
+			might be important to attempt
+			to validate its soundness? <em>(2 marks)</em>
+	</li></ol>
+<p></p>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q7/q7_1.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q7_1 q7_1.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+<h2>Q7.2 (5 marks)</h2>
+
+<p>
+	The following code attempts to write an
+	(inefficient, but simple)
+	implementation of a <code>Mutex</code>
+	using <code>unsafe</code>.
+</p>
+
+<p>
+	</p><pre style="background-color:#fafafa;"><span style="color:#fa6e32;">use </span><span style="color:#6e7580;">std</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">{cell</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">UnsafeCell</span><span style="color:#6e7580cc;">, </span><span style="color:#6e7580;">sync</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">Mutex</span><span style="color:#6e7580cc;">, </span><span style="color:#6e7580;">ops</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">{Deref</span><span style="color:#6e7580cc;">,</span><span style="color:#6e7580;"> DerefMut}}</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">pub struct </span><span style="color:#399ee6;">MyMutex</span><span style="color:#6e7580;">&lt;T&gt; {
+</span><span style="color:#6e7580;">    data</span><span style="color:#6e7580cc;">: </span><span style="color:#6e7580;">UnsafeCell&lt;T&gt;,
+</span><span style="color:#6e7580;">    is_locked</span><span style="color:#6e7580cc;">: </span><span style="color:#6e7580;">Mutex&lt;</span><span style="color:#fa6e32;">bool</span><span style="color:#6e7580;">&gt;,
+</span><span style="color:#6e7580;">}
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">impl</span><span style="color:#6e7580;">&lt;T&gt; </span><span style="color:#399ee6;">MyMutex</span><span style="color:#6e7580;">&lt;T&gt; {
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">pub fn </span><span style="color:#f29718;">new</span><span style="color:#6e7580;">(</span><span style="color:#a37acc;">data</span><span style="color:#6e7580cc;">:</span><span style="color:#6e7580;"> T) </span><span style="color:#6e7580cc;">-&gt; </span><span style="color:#fa6e32;">Self </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">        </span><span style="color:#fa6e32;">Self </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">            data</span><span style="color:#6e7580cc;">: </span><span style="color:#6e7580;">UnsafeCell</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">new(data)</span><span style="color:#6e7580cc;">,
+</span><span style="color:#6e7580;">            is_locked</span><span style="color:#6e7580cc;">: </span><span style="color:#6e7580;">Mutex</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">new(</span><span style="color:#a37acc;">false</span><span style="color:#6e7580;">)</span><span style="color:#6e7580cc;">,
+</span><span style="color:#6e7580;">        }
+</span><span style="color:#6e7580;">    }
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">pub fn </span><span style="color:#f29718;">lock</span><span style="color:#6e7580;">&lt;</span><span style="color:#fa6e32;">'lock</span><span style="color:#6e7580;">&gt;(</span><span style="color:#ed9366;">&amp;</span><span style="color:#fa6e32;">'lock </span><span style="color:#a37acc;">self</span><span style="color:#6e7580;">) </span><span style="color:#6e7580cc;">-&gt; </span><span style="color:#6e7580;">MyGuard&lt;</span><span style="color:#fa6e32;">'lock</span><span style="color:#6e7580;">, T&gt; {
+</span><span style="color:#6e7580;">        </span><span style="color:#fa6e32;">loop </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">            </span><span style="color:#fa6e32;">let mut</span><span style="color:#6e7580;"> is_locked </span><span style="color:#ed9366;">= </span><span style="font-style:italic;color:#55b4d4;">self</span><span style="color:#6e7580;">.is_locked.</span><span style="color:#f07171;">lock</span><span style="color:#6e7580;">().</span><span style="color:#f07171;">unwrap</span><span style="color:#6e7580;">()</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">            </span><span style="color:#fa6e32;">if </span><span style="color:#ed9366;">!*</span><span style="color:#6e7580;">is_locked {
+</span><span style="color:#6e7580;">                </span><span style="font-style:italic;color:#abb0b6;">// we now hold the lock!
+</span><span style="color:#6e7580;">                </span><span style="color:#ed9366;">*</span><span style="color:#6e7580;">is_locked </span><span style="color:#ed9366;">= </span><span style="color:#a37acc;">true</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">                </span><span style="color:#fa6e32;">return</span><span style="color:#6e7580;"> MyGuard { mutex</span><span style="color:#6e7580cc;">: </span><span style="font-style:italic;color:#55b4d4;">self </span><span style="color:#6e7580;">}</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">            }
+</span><span style="color:#6e7580;">        }
+</span><span style="color:#6e7580;">    }
+</span><span style="color:#6e7580;">}
+</span><span style="color:#6e7580;">
+</span><span style="font-style:italic;color:#abb0b6;">// Safety: Mutexes are designed to be used on multiple threads,
+</span><span style="font-style:italic;color:#abb0b6;">//         so we can send them to other threads
+</span><span style="font-style:italic;color:#abb0b6;">//         and share them with other threads.
+</span><span style="color:#fa6e32;">unsafe impl</span><span style="color:#6e7580;">&lt;T&gt; Send </span><span style="color:#fa6e32;">for </span><span style="color:#399ee6;">MyMutex</span><span style="color:#6e7580;">&lt;T&gt; {}
+</span><span style="color:#fa6e32;">unsafe impl</span><span style="color:#6e7580;">&lt;T&gt; Sync </span><span style="color:#fa6e32;">for </span><span style="color:#399ee6;">MyMutex</span><span style="color:#6e7580;">&lt;T&gt; {}
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">pub struct </span><span style="color:#399ee6;">MyGuard</span><span style="color:#6e7580;">&lt;</span><span style="color:#fa6e32;">'lock</span><span style="color:#6e7580;">, T&gt; {
+</span><span style="color:#6e7580;">    mutex</span><span style="color:#6e7580cc;">: </span><span style="color:#ed9366;">&amp;</span><span style="color:#fa6e32;">'lock </span><span style="color:#6e7580;">MyMutex&lt;T&gt;,
+</span><span style="color:#6e7580;">}
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">impl</span><span style="color:#6e7580;">&lt;T&gt; Deref </span><span style="color:#fa6e32;">for </span><span style="color:#399ee6;">MyGuard</span><span style="color:#6e7580;">&lt;'</span><span style="color:#ed9366;">_</span><span style="color:#6e7580;">, T&gt; {
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">type </span><span style="color:#399ee6;">Target </span><span style="color:#ed9366;">=</span><span style="color:#6e7580;"> T</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">deref</span><span style="color:#6e7580;">(</span><span style="color:#ed9366;">&amp;</span><span style="color:#a37acc;">self</span><span style="color:#6e7580;">) </span><span style="color:#6e7580cc;">-&gt; </span><span style="color:#ed9366;">&amp;</span><span style="color:#fa6e32;">Self</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">Target {
+</span><span style="color:#6e7580;">        </span><span style="font-style:italic;color:#abb0b6;">// Safety: We hold the lock until we are dropped,
+</span><span style="color:#6e7580;">        </span><span style="font-style:italic;color:#abb0b6;">//         so we have exclusive access to the data.
+</span><span style="color:#6e7580;">        </span><span style="font-style:italic;color:#abb0b6;">//         The shared borrow of the data is tracked through
+</span><span style="color:#6e7580;">        </span><span style="font-style:italic;color:#abb0b6;">//         the shared borrow of self (elided lifetime).
+</span><span style="color:#6e7580;">        </span><span style="color:#fa6e32;">unsafe </span><span style="color:#6e7580;">{ </span><span style="color:#ed9366;">&amp;*</span><span style="font-style:italic;color:#55b4d4;">self</span><span style="color:#6e7580;">.mutex.data.</span><span style="color:#f07171;">get</span><span style="color:#6e7580;">() }
+</span><span style="color:#6e7580;">    }
+</span><span style="color:#6e7580;">}
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">impl</span><span style="color:#6e7580;">&lt;T&gt; DerefMut </span><span style="color:#fa6e32;">for </span><span style="color:#399ee6;">MyGuard</span><span style="color:#6e7580;">&lt;'</span><span style="color:#ed9366;">_</span><span style="color:#6e7580;">, T&gt; {
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">deref_mut</span><span style="color:#6e7580;">(</span><span style="color:#ed9366;">&amp;</span><span style="color:#fa6e32;">mut </span><span style="color:#a37acc;">self</span><span style="color:#6e7580;">) </span><span style="color:#6e7580cc;">-&gt; </span><span style="color:#ed9366;">&amp;</span><span style="color:#fa6e32;">mut Self</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">Target {
+</span><span style="color:#6e7580;">        </span><span style="font-style:italic;color:#abb0b6;">// Safety: We hold the lock until we are dropped,
+</span><span style="color:#6e7580;">        </span><span style="font-style:italic;color:#abb0b6;">//         so we have exclusive access to the data.
+</span><span style="color:#6e7580;">        </span><span style="font-style:italic;color:#abb0b6;">//         The exclusive borrow of the data is tracked through
+</span><span style="color:#6e7580;">        </span><span style="font-style:italic;color:#abb0b6;">//         the exclusive borrow of self (elided lifetime).
+</span><span style="color:#6e7580;">        </span><span style="color:#fa6e32;">unsafe </span><span style="color:#6e7580;">{ </span><span style="color:#ed9366;">&amp;</span><span style="color:#fa6e32;">mut </span><span style="color:#ed9366;">*</span><span style="font-style:italic;color:#55b4d4;">self</span><span style="color:#6e7580;">.mutex.data.</span><span style="color:#f07171;">get</span><span style="color:#6e7580;">() }
+</span><span style="color:#6e7580;">    }
+</span><span style="color:#6e7580;">}
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">impl</span><span style="color:#6e7580;">&lt;T&gt; Drop </span><span style="color:#fa6e32;">for </span><span style="color:#399ee6;">MyGuard</span><span style="color:#6e7580;">&lt;'</span><span style="color:#ed9366;">_</span><span style="color:#6e7580;">, T&gt; {
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">drop</span><span style="color:#6e7580;">(</span><span style="color:#ed9366;">&amp;</span><span style="color:#fa6e32;">mut </span><span style="color:#a37acc;">self</span><span style="color:#6e7580;">) {
+</span><span style="color:#6e7580;">        </span><span style="color:#ed9366;">*</span><span style="font-style:italic;color:#55b4d4;">self</span><span style="color:#6e7580;">.mutex.is_locked.</span><span style="color:#f07171;">lock</span><span style="color:#6e7580;">().</span><span style="color:#f07171;">unwrap</span><span style="color:#6e7580;">() </span><span style="color:#ed9366;">= </span><span style="color:#a37acc;">false</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">    }
+</span><span style="color:#6e7580;">}
+</span></pre>
+
+<p></p>
+
+<p>
+	It can be used like this,
+	which produces the correct, expected output:
+</p>
+
+<p>
+	</p><pre style="background-color:#fafafa;"><span style="color:#fa6e32;">mod </span><span style="color:#399ee6;">my_mutex</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#fa6e32;">fn </span><span style="color:#f29718;">main</span><span style="color:#6e7580;">() {
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">use </span><span style="color:#6e7580;">std</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">thread</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">use </span><span style="color:#6e7580;">my_mutex</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">MyMutex</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">const </span><span style="color:#a37acc;">N_THREADS</span><span style="color:#6e7580cc;">:    </span><span style="color:#fa6e32;">u64 </span><span style="color:#ed9366;">= </span><span style="color:#a37acc;">20</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">const </span><span style="color:#a37acc;">N_INCREMENTS</span><span style="color:#6e7580cc;">: </span><span style="color:#fa6e32;">u64 </span><span style="color:#ed9366;">= </span><span style="color:#a37acc;">1000</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">const </span><span style="color:#a37acc;">EXPECTED</span><span style="color:#6e7580cc;">:     </span><span style="color:#fa6e32;">u64 </span><span style="color:#ed9366;">= </span><span style="color:#a37acc;">N_THREADS </span><span style="color:#ed9366;">* </span><span style="color:#a37acc;">N_INCREMENTS</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">let</span><span style="color:#6e7580;"> my_mutex</span><span style="color:#6e7580cc;">: </span><span style="color:#6e7580;">MyMutex&lt;</span><span style="color:#fa6e32;">u64</span><span style="color:#6e7580;">&gt; </span><span style="color:#ed9366;">= </span><span style="color:#6e7580;">MyMutex</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">new(</span><span style="color:#a37acc;">0</span><span style="color:#6e7580;">)</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">    thread</span><span style="color:#ed9366;">::</span><span style="color:#6e7580;">scope(|</span><span style="color:#a37acc;">scope</span><span style="color:#6e7580;">| {
+</span><span style="color:#6e7580;">        </span><span style="color:#fa6e32;">for </span><span style="color:#ed9366;">_ in </span><span style="color:#a37acc;">0</span><span style="color:#ed9366;">..</span><span style="color:#a37acc;">N_THREADS </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">            scope.</span><span style="color:#f07171;">spawn</span><span style="color:#6e7580;">(|| {
+</span><span style="color:#6e7580;">                </span><span style="color:#fa6e32;">for </span><span style="color:#ed9366;">_ in </span><span style="color:#a37acc;">0</span><span style="color:#ed9366;">..</span><span style="color:#a37acc;">N_INCREMENTS </span><span style="color:#6e7580;">{
+</span><span style="color:#6e7580;">                    </span><span style="color:#ed9366;">*</span><span style="color:#6e7580;">my_mutex.</span><span style="color:#f07171;">lock</span><span style="color:#6e7580;">() </span><span style="color:#ed9366;">+= </span><span style="color:#a37acc;">1</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">                }
+</span><span style="color:#6e7580;">            })</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">        }
+</span><span style="color:#6e7580;">    })</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">
+</span><span style="color:#6e7580;">    </span><span style="color:#fa6e32;">let</span><span style="color:#6e7580;"> final_value </span><span style="color:#ed9366;">= *</span><span style="color:#6e7580;">my_mutex.</span><span style="color:#f07171;">lock</span><span style="color:#6e7580;">()</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">    </span><span style="color:#f07171;">println!</span><span style="color:#6e7580;">(</span><span style="color:#86b300;">"Final value: </span><span style="color:#a37acc;">{final_value}</span><span style="color:#86b300;"> (expected </span><span style="color:#a37acc;">{EXPECTED}</span><span style="color:#86b300;">)"</span><span style="color:#6e7580;">)</span><span style="color:#6e7580cc;">;
+</span><span style="color:#6e7580;">}
+</span><span style="color:#6e7580;">
+</span></pre>
+
+<p></p>
+
+<pre is="tty"><kbd is="sh">cargo run</kbd>
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
+     Running `target/debug/mutex_broken`
+Final value: 20000 (expected 20000)
+</pre>
+
+<p>
+	Furthermore, running with Miri
+	(eventually) produces
+	nothing out of the ordinary:
+</p>
+
+<pre is="tty"><kbd is="sh">cargo +nightly miri run</kbd>
+Preparing a sysroot for Miri (target: x86_64-unknown-linux-gnu)... done
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
+     Running `/home/zac/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin/cargo-miri runner target/miri/x86_64-unknown-linux-gnu/debug/mutex_broken`
+Final value: 20000 (expected 20000)
+</pre>
+
+<p>
+	Note that if you plan to run the code
+	with Miri yourself, you might want to
+	consider decreasing the constants' values -
+	Miri is particularly slow to run.
+</p>
+
+<p>
+	However, there exists a subtle
+	unsoundness in <code>MyMutex</code>.
+
+	In certain conditions,
+	it is possible for an end-user of <code>MyMutex</code>
+	to cause <strong>undefined behaviour</strong>
+	without writing any <code>unsafe</code>.
+
+	In particular,
+	it is possible to cause a data race
+	using only safe code.
+</p>
+
+<aside class="note">
+	Note that <code>MyMutex</code> uses a
+	<code>Mutex</code> internally to store
+	the <code>lock_held</code> state, however
+	a more appropriate type here would have
+	been an <code>AtomicBool</code> instead.
+
+	A <code>Mutex</code> was specifically
+	chosen to limit the scope of unsoundness,
+	and its choice in place of an
+	<code>AtomicBool</code> is not relevant
+	to the unsoundness you are tasked to find.
+</aside>
+
+<p>
+	<strong>Question:</strong>
+
+	</p><ol>
+		<li>What is the soundness issue in <code>MyMutex</code>,
+			and how could it be fixed? <em>(3 marks)</em>
+
+		</li><li>Provide a short example <code>main</code>
+			function using only safe Rust
+			that can reproduce a data race
+			by exploiting the located unsoundness
+			when run with Miri. <em>(2 marks)</em>
+	</li></ol>
+<p></p>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q7/q7_2.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q7_2 q7_2.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+            
+            
+        
+      
+        
+      
+    
+
+    
+        
+    
+        
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+</section>
+  
+    
+<section class="exercise">
+    <header><h3><small style="font-variant: small-caps; text-transform: lowercase;">
+    
+    
+    Exercise:
+</small>
+<br>Q8: Theory (10 marks)</h3></header>
+
+    
+
+    
+    
+    
+
+<p>
+  The final question of the exam will be a more open-ended question
+  which will ask you to perform some analysis or make an argument.
+  
+  Your argument will be judged alike an essay
+  (<abbr>i.e.</abbr> are your claims substantiated by compelling arguments).
+
+  Remember that you <strong>will not</strong> get any marks for blindly supporting / opposing Rust.
+</p>
+
+<p>
+  A friend of yours has just read an article critical of Rust,
+  written approximately 7 years ago.
+  Following is a relevant excerpt of the article for you to read.
+  
+  The original article is a very long and challenging read, so
+  please only read / consider this excerpt.
+</p>
+
+<pre># Criticizing the Rust Language, and Why C/C++ Will Never Die
+
+Eax Melanhovich, May 12 2015.
+
+I believe Rust is overhyped, and that the death of C and C++ are
+over-exaggerated. It is crystal clear for every sane programmer that C/C++ is
+not going to die in the near future. No one is going to rewrite almost all of
+the existing desktop applications, operating system kernels, browser engines,
+tons of other C-libraries, and so on and so forth, into other languages. This is
+a huge mass of fast, debugged, and time-proven code. Rewriting it is way, way
+too expensive, risky, and, honestly, doesn't seem to make sense except in the
+heads of the most frantic Rust fans. The demand for C/C++ programmers has always
+been high and will remain so for a long time to come.
+
+C/C++ is criticized for a variety of reasons. Briefly, the issue
+with C++ is that it is very fast but it is not safe in the sense that it allows
+array overruns, addressing freed memory, and so on. Back in the past, this
+problem urged programmers to develop a variety of safe languages such as Java,
+C#, Python, and others. But they have proved to be too resource-demanding
+compared to C++. That's why programmers are struggling to create a language as
+fast as C++ but also safe. Rust is one of the candidates.
+
+And what actually makes Rust safe, by the way? To put it simple, this is a
+language with a built-in code analyzer, and it's a pretty tough one: it can catch
+all the bugs typical of C++, dealing not only with memory management, but
+multithreading as well. Pass a reference to an assignable object through a pipe
+to another thread and then try to use this reference yourself - the program
+will just refuse to compile. And that's really cool.
+
+But other languages haven't stood still during the last 30 years, and there are
+many compile-time and runtime analysers which will check your code for issues.
+In any serious project, you use a continuous integration system and run tons of
+tests when compiling builds. If you don't, then your troubles are much worse
+than the language's lack of safety because static typing doesn't guarantee
+correct execution logic! So, since you run tests anyway, why not use sanitizers
+as well? True, they don't find all the bugs. But it's still pretty good, and you
+don't need to deal with performance issues caused by checking the bounds of an
+array at runtime, or the pain that the Rust compiler forces you into. Even
+without sanitizers, you'll find lots of stuff just building the project with
+various compilers on different platforms with assert's checking your code's
+invariants in the "assert(obj-&gt;isValid)" fashion and with proper fuzzing.
+
+Even apart from that, I'm also skeptical about the language's design as such. In
+particular with regards to the many types of pointers used in it. On the one hand,
+it's not bad to make programmers ponder if their variables are stored in the
+stack or heap and if they can or cannot be handled by several threads at a time.
+But on the other hand, imagine you are writing a program and discover at one
+moment that some variable should be stored in the heap instead of the stack. So
+you rewrite the code to use Box. Then you figure out that you actually need Rc
+or Arc. Again, you rewrite all that code. And then, once again, you rewrite it
+all to have an ordinary variable in the stack. Regular expressions won't help.
+Or you might just end up with a nightmare like "Vec&lt;Rc&lt;RefCell&lt;Box&lt;Trait&gt;&gt;&gt;&gt;" -
+say hello to Java! It would be much more convenient to let the programmer simply
+declare a variable and explicitly specify Box or Rc where necessary. From this
+viewpoint, Rust's developers have screwed up the whole thing.
+
+Like many of new languages, Rust is walking the path of simplification. I can
+generally understand why it doesn't have inheritance and exceptions, but the
+fact itself that someone is making decisions for me regarding things like that
+makes me feel somewhat displeased. C++ doesn't restrict programmers regarding
+what they can or cannot use.
+
+I can't help but remind you one more time that the source of troubles is usually
+in humans, not technology. If your C++ code is not good enough or Java code is
+painfully slow, it's not because the technology is bad - it's because you
+haven't learned how to use it right. In that sense, you won't be satisfied with
+Rust either - but just for some other reasons. Isn't it easier to learn how to use
+more popular tools and start liking them?
+
+So, to sum it up, personally I will be investing my time into studying C/C++
+rather than Rust in the next 5 or so years. C++ is an industrial standard.
+Programmers have been using it to solve a huge variety of tasks for over 30
+years now. As for Rust and stuff like that - they are just odd toys with a vague
+future. People have been predicting C++'s soon death since the 2000-s, but C/C++
+haven't become less used and demanded for since then.
+</pre>
+
+<small>
+From
+<a href="https://pvs-studio.com/en/blog/posts/0324/">
+https://pvs-studio.com/en/blog/posts/0324/</a>.
+</small>
+
+<hr>
+
+<p>
+  Read through the excerpt,
+  and <strong><u>discuss</u></strong> the following prompt:
+</p>
+
+<h5>Rust is too strict and too painful to be useful,
+	as explained by this article.</h5>
+
+<p>
+  The overall <em>structure</em> of your answer
+  is <strong>not</strong> marked.
+  For example,
+  your answer may include small paragraphs of prose
+  accompanied by dot-points,
+  or could instead be posed as a verbal discussion with your friend.
+
+  Regardless of the structure / formatting you choose,
+  the <strong>substance</strong> of what you write
+  is the most important factor,
+  and is what will determine
+  your overall mark for this question.
+</p>
+<p>
+  Only responses less than 1000 words will be marked for this question.
+  There will be many good answers that are significantly shorter (see above),
+  this limit is a cap to save our marking time, and your sanity.
+</p><p>
+
+</p><aside class="note">
+  From
+  <a href="https://www.student.unsw.edu.au/glossary-task-words" target="_blank">
+    UNSW's Glossary of Task Words</a>:
+  <br><br>
+  <table class="table table-bordered">
+    <tbody><tr>
+      <td><strong>Discuss</strong></td>
+      <td>Investigate or examine by argument.
+          Examine key points and possible interpretations,
+          sift and debate,
+          giving reasons for and against.
+          Draw a conclusion.</td>
+    </tr>
+  </tbody></table>
+</aside>
+
+<hr>
+
+<p>
+Write your answer in <code>exam_q8/q8.txt</code>.
+
+</p><p>
+When you are finished working on your answer, submit your work with <strong>give</strong>:
+</p><pre is="tty"><kbd is="sh">give cs6991 exam_q8 q8.txt</kbd>
+</pre>
+
+<br>
+<br>
+
+
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+            
+            
+        
+      
+    
+
+    
+        
+    
+        
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+</section>
+  
+
+
+
+  
+    <section>
+      <header><h3>Submission</h3></header>
+      
+
+        <p>
+          When you are finished each exercise make sure you submit your work by running <strong>give</strong>.
+
+        </p><p>
+          You can run <strong>give</strong> multiple times.
+          Only your last submission will be marked.
+
+        </p><p>
+          Don't submit any exercises you haven't attempted.
+
+        </p><p>
+            Do not leave it to the deadline to submit your answers.
+            Submit each question when you finish working on it.
+            Running autotests does not automatically submit your code.
+
+        </p><p>
+          If you are working at home, you may find it more convenient
+          to upload your work via
+        <a href="https://cgi.cse.unsw.edu.au/~give/Student/give.php">give's web interface</a>.
+
+        </p><p>
+          Remember you have until <b>2022-12-06 12:00:00</b>, Sydney time, to complete this exam
+          (not including any extra time provided by ELPs).
+
+        </p><p>
+          You cannot obtain marks by e-mailing your code to tutors or lecturers.
+
+        </p><p>
+          </p><pre is="tty"><kbd is="sh">6991 classrun -check exam_q1_1</kbd>
+<kbd is="sh">6991 classrun -check exam_q1_2</kbd>
+<kbd is="sh">6991 classrun -check exam_q1_3</kbd>
+<kbd is="sh">6991 classrun -check exam_q1_4</kbd>
+<kbd is="sh">6991 classrun -check exam_q2</kbd>
+...
+<kbd is="sh">6991 classrun -check exam_q8</kbd>
+</pre>
+
+      
+  
+
+
+<p class="text-cetner font-weight-bold text-uppercase">- End of examination. -</p>
+</section></div>
+
+
+            
+    </div>
+</div></main>
+<footer class="mt-3 pt-3 bg-dark text-center no-print">
+    <p class="text-muted">
+        <strong>COMP6991 22T3: Solving Modern Programming Problems with Rust</strong>
+        is brought to you by <br>
+        the <a href="https://www.cse.unsw.edu.au/">School of Computer Science and Engineering</a><br>
+        at the <a href="https://www.unsw.edu.au/">University of New South Wales</a>, Sydney.<br>
+        For all enquiries, please email the class account at
+        <a href="mailto:cs6991@cse.unsw.edu.au">cs6991@cse.unsw.edu.au</a><br>
+
+        <small>CRICOS Provider 00098G</small>
+
+        
+        <a class="float-right mr-3 text-muted" href="https://cgi.cse.unsw.edu.au/~cs6991/22T3/tutor">
+            Login as tutor
+        </a>
+        
+    </p>
+</footer>
+
+
+
+</body></html>
