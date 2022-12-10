@@ -1,29 +1,26 @@
-pub struct DBMap<A, B>
-where A: Eq
+pub struct DBMap<Key, Value> 
+where Key: Eq
 {
-    pub data: Vec<(A, B)>
+    pub data: Vec<(Key, Value)>
 }
 
-impl<A:Eq, B> DBMap<A, B> {
-    pub fn merge<C>(self, mut other: DBMap<A, C>) -> DBMap<A, (B, Option<C>)> {
-        let mut res = DBMap{
-            data: Vec::<(A, (B, Option<C>))>::new()
-        };
-
-        for (key1, val1) in self.data.iter() {
-            for (key2, val2) in other.data.iter() {
-                if key1 == key2 {
-                    res.data.push(
-                        (key1, (val1, Some(val2)))
-                    );
-                    continue;
-                }
+impl<Key, Value1> DBMap<Key, Value1> 
+where Key: Eq
+{
+    pub fn merge<Value2>(self, mut other: DBMap<Key, Value2>) -> DBMap<Key, (Value1, Option<Value2>)> {
+        let mut data = Vec::<(Key, (Value1, Option<Value2>))>::new();
+        
+        for (key1, val1) in self.data {
+            match other.data.iter().position(|(key2, _val2)| *key2 == key1) {
+                Some(idx) => {
+                    data.push((key1, (val1, Some(other.data.remove(idx).1))));
+                },
+                None => {
+                    data.push((key1, (val1, None)));
+                },
             }
-            res.data.push(
-                (key1, (val1, None))
-            )
         }
 
-        res
+        DBMap { data }
     }
 }
