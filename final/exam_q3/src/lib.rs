@@ -13,6 +13,7 @@ where Key: Eq
         for (key1, val1) in self.data {
             match other.data.iter().position(|(key2, _val2)| *key2 == key1) {
                 Some(idx) => {
+                    // Take the ownership from the element before pushing into the new vector
                     data.push((key1, (val1, Some(other.data.remove(idx).1))));
                 },
                 None => {
