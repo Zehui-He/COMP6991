@@ -1,0 +1,18 @@
+[package]
+name = "iris"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "iris_lib"
+path = "src/lib/mod.rs"
+
+[[bin]]
+name = "iris"
+path = "src/main.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bufstream = "0.1.4"
+clap = { version = "4.0.18", features = ["derive"] }
