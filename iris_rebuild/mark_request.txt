@@ -3,32 +3,40 @@
 (You should put an [X] in boxes with completed features.
 Lines starting with ">" are additional comments.)
 
-[ ] The server can be started with the command `cargo run 127.0.0.1 6991`.
+[X] The server can be started with the command `cargo run 127.0.0.1 6991`.
 
-[ ] When a 'NICK' message is sent, the server stores the relevant information from it.
-[ ] When a 'USER' message is sent after a 'NICK', the server replies with a RPL_WELCOME.
-[ ] The RPL_WELCOME contains the user's full name from the 'USER' message
-[ ] Non-'NICK'/'USER' messages are ignored until the user has sent both.
+[X] When a 'NICK' message is sent, the server stores the relevant information from it.
 
-[ ] When a user sends a 'PING' message, an appropriate 'PONG' is sent back.
+[X] When a 'USER' message is sent after a 'NICK', the server replies with a RPL_WELCOME.
+> The RPL_WELCOME message will be sent regardless the order of NICK and USER message.
 
-[ ] When a user sends a 'QUIT' message, their connection is dropped.
+[X] The RPL_WELCOME contains the user's full name from the 'USER' message.
 
-[ ] When a user sends a 'PRIVMSG' message to themselves, it is sent back to them.
+[X] Non-'NICK'/'USER' messages are ignored until the user has sent both.
+> A new error code is used to indicate the error that the user is not register in the server.
 
-[ ] Multiple users can join the same server.
+[X] When a user sends a 'PING' message, an appropriate 'PONG' is sent back.
 
-[ ] Messages can be sent from one user to another.
+[X] When a user sends a 'QUIT' message, their connection is dropped.
 
-[ ] A user can 'JOIN' a channel.
+[X] When a user sends a 'PRIVMSG' message to themselves, it is sent back to them.
 
-[ ] A user can 'PART' a channel.
+[X] Multiple users can join the same server.
 
-[ ] All relevant messages sent by users inside a channel are sent to every other member of that channel.
+[X] Messages can be sent from one user to another.
 
-[ ] My design never stores messages, and deletes users as soon as they have left the server.
+[X] A user can 'JOIN' a channel.
+> When a user try to join a non-exist channel, the server would create the channel and the user would join automatically.
+> When a user join an already joined channel, a new error code would be shown.
+> A user can join multiple channel at the same time. 
 
-[ ] My design never stores messages, and deletes users as soon as they have left the server.
+[X] A user can 'PART' a channel.
+> If a user try to part a non-exist channel, the server will show a new error code saying that the channel doesn't exist.
+> If a user try to part a non-joined channel, the server would shwo a new error code saying the user doesn't join the channel.
+
+[X] All relevant messages sent by users inside a channel are sent to every other member of that channel.
+
+[X] My design never stores messages, and deletes users as soon as they have left the server.
 
 [ ] It is possible to set reminders, using the following command (change this if you'd like)
 > PRIVMSG remindbot :10s tfpk :Remind me of something.

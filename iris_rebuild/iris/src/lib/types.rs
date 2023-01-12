@@ -12,6 +12,10 @@ pub enum ErrorType {
     NeedMoreParams = 461,
     NoSuchNick = 401,
     NoSuchChannel = 403,
+    // Self-define errors
+    UserNotRegistered = 400,
+    UserNotJoinChannel = 433,
+    UserAlreadyInChannel = 434
 }
 
 /// This is the name of your server, all messages originating from
@@ -51,6 +55,15 @@ impl std::fmt::Display for ErrorType {
             }
             ErrorType::NickCollision => {
                 write!(fmt, ":{SERVER_NAME} 436 :Nickname collision")
+            },
+            ErrorType::UserNotJoinChannel => {
+                write!(fmt, ":{SERVER_NAME} 433 :User not joined the channel")
+            },
+            ErrorType::UserNotRegistered => {
+                write!(fmt, ":{SERVER_NAME} 400 :User not registered in server")
+            },
+            ErrorType::UserAlreadyInChannel => {
+                write!(fmt, ":{SERVER_NAME} 434 :User is already in channel")
             }
         }
     }
