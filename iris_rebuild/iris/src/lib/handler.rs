@@ -1,10 +1,17 @@
+//! Define the behaviour of sending message to the receiver/plugin. 
+
 use crate::{
     channel::ChannelPool,
+    types::{
+        Channel, JoinMsg, JoinReply, NickMsg, ParsedMessage, PartMsg, PartReply, QuitMsg,
+        QuitReply, WelcomeReply,
+    },
     types::{ErrorType, Message, Nick, PrivMsg, PrivReply, Reply, Target, UserMsg},
-    types::{NickMsg, ParsedMessage, WelcomeReply, JoinMsg, PartMsg, Channel, JoinReply, QuitMsg, PartReply, QuitReply},
-    user::UserPool,
+    user::UserPool, plugin::reminder_handler, plugin_handler::PluginStruct,
 };
 
+/// Functions that used for sending the parsed message to the destination.
+/// Upon failure, the function would return a TypeError message. 
 pub fn error_message_handler(user_pool: &mut UserPool, err: ErrorType, sender_nick: Nick) {
     // Find the user by ID
     let mut users = user_pool.get_write_pool();
@@ -16,21 +23,30 @@ pub fn error_message_handler(user_pool: &mut UserPool, err: ErrorType, sender_ni
     sender.send_error(err);
 }
 
+/// Functions that used for sending the error message to the destination, generally the sender.
+/// Upon failure, the function would return a TypeError message. 
 pub fn parsed_message_handler(
     user_pool: &mut UserPool,
     channel_pool: &mut ChannelPool,
     parsed_msg: ParsedMessage,
+    plugin_handler: &PluginStruct
 ) -> Result<(), ErrorType> {
     match parsed_msg.message {
         Message::Nick(nick_msg) => nick_msg_handler(user_pool, nick_msg, parsed_msg.sender_nick),
         Message::User(user_msg) => user_msg_handler(user_pool, user_msg, parsed_msg.sender_nick),
         Message::PrivMsg(priv_msg) => {
-            priv_msg_handler(user_pool, channel_pool, priv_msg, parsed_msg.sender_nick)
+            priv_msg_handler(user_pool, channel_pool, priv_msg, parsed_msg.sender_nick, plugin_handler)
         }
         Message::Ping(ping_msg) => ping_msg_handler(user_pool, ping_msg, parsed_msg.sender_nick),
-        Message::Join(join_msg) => join_msg_handler(user_pool, channel_pool, join_msg, parsed_msg.sender_nick),
-        Message::Part(part_msg) => part_msg_handler(user_pool, channel_pool, part_msg, parsed_msg.sender_nick),
-        Message::Quit(quit_msg) => quit_msg_handler(user_pool, channel_pool, quit_msg, parsed_msg.sender_nick),
+        Message::Join(join_msg) => {
+            join_msg_handler(user_pool, channel_pool, join_msg, parsed_msg.sender_nick)
+        }
+        Message::Part(part_msg) => {
+            part_msg_handler(user_pool, channel_pool, part_msg, parsed_msg.sender_nick)
+        }
+        Message::Quit(quit_msg) => {
+            quit_msg_handler(user_pool, channel_pool, quit_msg, parsed_msg.sender_nick)
+        }
     }
 }
 
@@ -131,16 +147,11 @@ fn priv_msg_handler(
     channel_pool: &mut ChannelPool,
     priv_msg: PrivMsg,
     sender_nick: Nick,
+    plugin_handler: &PluginStruct
 ) -> Result<(), ErrorType> {
-    let mut users = user_pool.get_write_pool();
 
     // The sender cannot send messgae if not registered
-    let sender = users
-        .iter_mut()
-        .find(|user| user.get_nick() == sender_nick)
-        .unwrap();
-
-    if !sender.is_registered() {
+    if !user_pool.user_is_registered(sender_nick.clone()) {
         return Err(ErrorType::UserNotRegistered);
     }
 
@@ -149,6 +160,8 @@ fn priv_msg_handler(
 
     match target {
         Target::Channel(channel_obj) => {
+            let mut users = user_pool.get_write_pool();
+
             let channel_name = channel_obj.0;
 
             // If the channel doesn't exist, throw error
@@ -158,7 +171,7 @@ fn priv_msg_handler(
 
             // If the user is not in the channel, throw error
             if !channel_pool.user_in_channel(&channel_name, sender_nick.clone()) {
-                return  Err(ErrorType::UserNotJoinChannel);
+                return Err(ErrorType::UserNotJoinChannel);
             }
 
             // Send the message to every user in the channel
@@ -184,6 +197,14 @@ fn priv_msg_handler(
             Ok(())
         }
         Target::User(receiver_nick) => {
+            // If the user called a reminder plugin
+            if plugin_handler.is_plugin(receiver_nick.clone()) {
+                println!("You called a plugin.");
+                return reminder_handler(user_pool, message, sender_nick)
+            }
+
+            let mut users = user_pool.get_write_pool();
+
             let receiver = users
                 .iter_mut()
                 .find(|user| user.get_nick() == receiver_nick);
@@ -207,7 +228,8 @@ fn priv_msg_handler(
     }
 }
 
-fn join_msg_handler(user_pool: &mut UserPool,
+fn join_msg_handler(
+    user_pool: &mut UserPool,
     channel_pool: &mut ChannelPool,
     join_msg: JoinMsg,
     sender_nick: Nick,
@@ -241,8 +263,10 @@ fn join_msg_handler(user_pool: &mut UserPool,
             .find(|user| user.get_nick() == Nick(receiver_nick.clone()))
             .unwrap();
 
-        receiver.send(Reply::Join(JoinReply{
-            message: JoinMsg { channel: Channel(channel_name.clone()) },
+        receiver.send(Reply::Join(JoinReply {
+            message: JoinMsg {
+                channel: Channel(channel_name.clone()),
+            },
             sender_nick: sender_nick.clone(),
         }))
     }
@@ -250,7 +274,8 @@ fn join_msg_handler(user_pool: &mut UserPool,
     Ok(())
 }
 
-fn part_msg_handler(user_pool: &mut UserPool,
+fn part_msg_handler(
+    user_pool: &mut UserPool,
     channel_pool: &mut ChannelPool,
     part_msg: PartMsg,
     sender_nick: Nick,
@@ -266,7 +291,7 @@ fn part_msg_handler(user_pool: &mut UserPool,
     if !channel_pool.channel_exist(&channel_name) {
         return Err(ErrorType::NoSuchChannel);
     }
-    
+
     // Throw error if the user not in the channel
     if !channel_pool.user_in_channel(&channel_name, sender_nick.clone()) {
         return Err(ErrorType::UserNotJoinChannel);
@@ -284,8 +309,10 @@ fn part_msg_handler(user_pool: &mut UserPool,
             .find(|user| user.get_nick() == Nick(receiver_nick.clone()))
             .unwrap();
 
-        receiver.send(Reply::Part(PartReply{
-            message: PartMsg { channel: Channel(channel_name.clone()) },
+        receiver.send(Reply::Part(PartReply {
+            message: PartMsg {
+                channel: Channel(channel_name.clone()),
+            },
             sender_nick: sender_nick.clone(),
         }))
     }
@@ -301,7 +328,8 @@ fn part_msg_handler(user_pool: &mut UserPool,
     Ok(())
 }
 
-fn quit_msg_handler(user_pool: &mut UserPool,
+fn quit_msg_handler(
+    user_pool: &mut UserPool,
     channel_pool: &mut ChannelPool,
     quit_msg: QuitMsg,
     sender_nick: Nick,
@@ -309,7 +337,7 @@ fn quit_msg_handler(user_pool: &mut UserPool,
     // Send message to all the channel that the user joined
     let users = user_pool.get_write_pool();
     let user = users.iter().find(|x| x.get_nick() == sender_nick).unwrap();
-    
+
     // Send quit message to all channel that the user joined
     let channels = user.get_joined_channels().clone();
     drop(users);
@@ -326,13 +354,13 @@ fn quit_msg_handler(user_pool: &mut UserPool,
                 .find(|user| user.get_nick() == Nick(receiver_nick.clone()))
                 .unwrap();
 
-            receiver.send(Reply::Quit(QuitReply{
+            receiver.send(Reply::Quit(QuitReply {
                 message: quit_msg.clone(),
                 sender_nick: sender_nick.clone(),
             }))
         }
     }
-    
+
     // Remove user from all channels
     channel_pool.remove_user(sender_nick.clone());
 

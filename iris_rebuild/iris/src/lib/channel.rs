@@ -1,6 +1,8 @@
+//! Struct represants all channels in the IRC server. 
+
 use std::collections::HashMap;
 
-use crate::types::{ErrorType, Nick};
+use crate::types::Nick;
 
 pub struct ChannelPool {
     channel_hashmap: HashMap<String, Vec<String>>,

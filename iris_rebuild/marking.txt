@@ -1,0 +1,526 @@
+Session: 22T3
+Assignment: assign02_iris  Submission ID: 5098168
+
+
+Your submission has been marked. + /usr/bin/less -m /import/adams/2/z5098168/cs6991.assign02_iris.mrk
+Assignment: assign02_iris
+Student: 5098168 (all)
+Created: 2022-12-14 22:51:24
+Submitted: 2022-11-20 15:48:34
+# Final Mark:  (81.42 / 100)
+
+# final_mark
+```
+     1  ==================================================== 
+     2  =                    Final Mark                    = 
+     3  ==================================================== 
+     4 ----- Mechanical Style Mark -----
+     5 
+     6 [3] Mark for compilation (/3)
+     7 [0] Mark for tests (/1)
+     8 [1] Mark for clippy (/3)
+     9 [1] Mark for formatting (/3)
+    10 
+    11 MS Mark: 5/10
+    12 
+    13 ----- Functional Correctness Mark -----
+    14 
+    15 (left blank, since we gave you marks for what you said.)
+    16 
+    17 FC Mark: 40/40
+    18 
+    19 ----- Idiomatic Design Mark -----
+    20 
+    21 - Effective use of locks (only locking when required and releasing ASAP)
+    22 - Generally well documented functions
+    23 - I like that you implemented separate handler methods rather than implementing them at the parent `match` block
+    24 - Plugin documentation example is nice, but I was unable to find an actual example of what a function (that you are passing in) would look like just via the documentation that is generated (check comments I added into the files). Otherwise, the functions that you did provide as examples (reminder, date) were quite easy to follow.
+    25 - Logging was also rather rudimentary but the messages were good; consider using a library like tokio tracing or env_logger to generate some better logs (that include the log leve, such as INFO, DEBUG, etc.).
+    26 - Consider potentially adding some tests next time 😃
+    27 
+    28 ID Mark: 46/50
+    29 
+    30 
+    31 
+```
+hash: df272335a4c80a9a8d78df68bc313e2bd92cf11e6f5a24009b4342890f4304bd
+# build_logs
+```
+     1  ==================================================== 
+     2  =                    Build Logs                    = 
+     3  ==================================================== 
+     4    = For Crate: iris/_build_log =   
+     5 Fri 09 Dec 2022 22:43:33 AEDT
+     6 === build ===
+     7    Compiling version_check v0.9.4
+     8    Compiling proc-macro2 v1.0.47
+     9    Compiling unicode-ident v1.0.5
+    10    Compiling autocfg v1.1.0
+    11    Compiling quote v1.0.21
+    12    Compiling libc v0.2.137
+    13    Compiling syn v1.0.103
+    14    Compiling heck v0.4.0
+    15    Compiling os_str_bytes v6.3.1
+    16    Compiling strsim v0.10.0
+    17    Compiling termcolor v1.1.3
+    18    Compiling iana-time-zone v0.1.53
+    19    Compiling bitflags v1.3.2
+    20    Compiling clap_lex v0.3.0
+    21    Compiling once_cell v1.16.0
+    22    Compiling bufstream v0.1.4
+    23    Compiling proc-macro-error-attr v1.0.4
+    24    Compiling proc-macro-error v1.0.4
+    25    Compiling num-traits v0.2.15
+    26    Compiling num-integer v0.1.45
+    27    Compiling time v0.1.44
+    28    Compiling atty v0.2.14
+    29    Compiling chrono v0.4.23
+    30    Compiling clap_derive v4.0.18
+    31    Compiling clap v4.0.18
+    32    Compiling iris v0.1.0 (/home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris)
+    33     Finished dev [unoptimized + debuginfo] target(s) in 9.69s
+    34 === test ===
+    35    Compiling iris v0.1.0 (/home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris)
+    36     Finished test [unoptimized + debuginfo] target(s) in 0.63s
+    37      Running unittests src/lib/mod.rs (target/debug/deps/iris_lib-c0c7dfaeb2b58484)
+    38 
+    39 running 3 tests
+    40 test types::tests::test_nick ... ok
+    41 test types::tests::test_ping ... ok
+    42 test types::tests::test_privmsg ... ok
+    43 
+    44 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+    45 
+    46      Running unittests src/main.rs (target/debug/deps/iris-9fb0024aa1dc2a55)
+    47 
+    48 running 0 tests
+    49 
+    50 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+    51 
+    52    Doc-tests iris_lib
+    53 
+    54 running 1 test
+    55 test src/lib/plugin.rs - plugin::Plugin::new (line 26) ... FAILED
+    56 
+    57 failures:
+    58 
+    59 ---- src/lib/plugin.rs - plugin::Plugin::new (line 26) stdout ----
+    60 error[E0411]: cannot find type `Self` in this scope
+    61  --> src/lib/plugin.rs:27:17
+    62   |
+    63 3 | pub fn new() -> Self {
+    64   |        ---      ^^^^ `Self` is only available in impls, traits, and type definitions
+    65   |        |
+    66   |        `Self` not allowed in a function
+    67 
+    68 error[E0433]: failed to resolve: use of undeclared type `HashMap`
+    69  --> src/lib/plugin.rs:28:26
+    70   |
+    71 4 |     let plugin_hashmap = HashMap::<String, Box<PluginFunc>>::new();
+    72   |                          ^^^^^^^ not found in this scope
+    73   |
+    74 help: consider importing this struct
+    75   |
+    76 2 | use std::collections::HashMap;
+    77   |
+    78 
+    79 error[E0412]: cannot find type `PluginFunc` in this scope
+    80  --> src/lib/plugin.rs:28:48
+    81   |
+    82 3 | pub fn new() -> Self {
+    83   |           - help: you might be missing a type parameter: `<PluginFunc>`
+    84 4 |     let plugin_hashmap = HashMap::<String, Box<PluginFunc>>::new();
+    85   |                                                ^^^^^^^^^^ not found in this scope
+    86 
+    87 error[E0422]: cannot find struct, variant or union type `Plugin` in this scope
+    88  --> src/lib/plugin.rs:29:26
+    89   |
+    90 5 |     let mut plugin_obj = Plugin { plugins: plugin_hashmap };
+    91   |                          ^^^^^^ not found in this scope
+    92   |
+    93 help: consider importing this struct
+    94   |
+    95 2 | use iris_lib::plugin::Plugin;
+    96   |
+    97 
+    98 error[E0425]: cannot find value `send_msg_plug_in` in this scope
+    99  --> src/lib/plugin.rs:31:65
+   100   |
+   101 7 |     plugin_obj.insert_plugin("send_message_at_2pm".to_string(), send_msg_plug_in);
+   102   |                                                                 ^^^^^^^^^^^^^^^^ not found in this scope
+   103 
+   104 error: aborting due to 5 previous errors
+   105 
+   106 Some errors have detailed explanations: E0411, E0412, E0422, E0425, E0433.
+   107 For more information about an error, try `rustc --explain E0411`.
+   108 Couldn't compile the test.
+   109 
+   110 failures:
+   111     src/lib/plugin.rs - plugin::Plugin::new (line 26)
+   112 
+   113 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+   114 
+   115 error: doctest failed, to rerun pass `--doc`
+   116 === clippy ===
+   117     Checking os_str_bytes v6.3.1
+   118     Checking iana-time-zone v0.1.53
+   119     Checking bitflags v1.3.2
+   120     Checking strsim v0.10.0
+   121     Checking libc v0.2.137
+   122     Checking num-traits v0.2.15
+   123     Checking once_cell v1.16.0
+   124     Checking termcolor v1.1.3
+   125     Checking bufstream v0.1.4
+   126     Checking clap_lex v0.3.0
+   127     Checking time v0.1.44
+   128     Checking atty v0.2.14
+   129     Checking num-integer v0.1.45
+   130     Checking clap v4.0.18
+   131     Checking chrono v0.4.23
+   132     Checking iris v0.1.0 (/home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris)
+   133 warning: manual implementation of an assign operation
+   134    --> src/lib/connect.rs:127:9
+   135     |
+   136 127 |         self.buflen = self.buflen - after_crlf;
+   137     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace it with: `self.buflen -= after_crlf`
+   138     |
+   139     = note: `#[warn(clippy::assign_op_pattern)]` on by default
+   140     = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#assign_op_pattern
+   141 
+   142 warning: redundant closure
+   143    --> src/lib/types.rs:174:23
+   144     |
+   145 174 |             .and_then(|value| Nick::try_from(value))
+   146     |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the function itself: `Nick::try_from`
+   147     |
+   148     = note: `#[warn(clippy::redundant_closure)]` on by default
+   149     = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_closure
+   150 
+   151 warning: redundant closure
+   152    --> src/lib/types.rs:194:23
+   153     |
+   154 194 |             .and_then(|value| Channel::try_from(value))
+   155     |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the function itself: `Channel::try_from`
+   156     |
+   157     = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_closure
+   158 
+   159 warning: redundant closure
+   160    --> src/lib/types.rs:214:23
+   161     |
+   162 214 |             .and_then(|value| Channel::try_from(value))
+   163     |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the function itself: `Channel::try_from`
+   164     |
+   165     = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_closure
+   166 
+   167 warning: you seem to be trying to use `match` for destructuring a single pattern. Consider using `if let`
+   168   --> src/lib/handler.rs:62:5
+   169    |
+   170 62 | /     match users
+   171 63 | |         .iter()
+   172 64 | |         .find(|usr| usr.get_nick_name() == Some(nickmsg.nick.0.clone()))
+   173 65 | |     {
+   174 66 | |         Some(_) => return Err(ErrorType::NickCollision),
+   175 67 | |         None => {}
+   176 68 | |     }
+   177    | |_____^
+   178    |
+   179    = note: `#[warn(clippy::single_match)]` on by default
+   180    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#single_match
+   181 help: try this
+   182    |
+   183 62 ~     if let Some(_) = users
+   184 63 +         .iter()
+   185 64 +         .find(|usr| usr.get_nick_name() == Some(nickmsg.nick.0.clone())) { return Err(ErrorType::NickCollision) }
+   186    |
+   187 
+   188 warning: unneeded `return` statement
+   189    --> src/lib/handler.rs:155:25
+   190     |
+   191 155 |                 None => return Err(ErrorType::NoSuchChannel),
+   192     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove `return`: `Err(ErrorType::NoSuchChannel)`
+   193     |
+   194     = note: `#[warn(clippy::needless_return)]` on by default
+   195     = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_return
+   196 
+   197 warning: unneeded `return` statement
+   198    --> src/lib/handler.rs:187:25
+   199     |
+   200 187 |                 None => return Err(ErrorType::NoSuchNick),
+   201     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: remove `return`: `Err(ErrorType::NoSuchNick)`
+   202     |
+   203     = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_return
+   204 
+   205 warning: use of `or_insert` followed by a function call
+   206    --> src/lib/handler.rs:275:10
+   207     |
+   208 275 |         .or_insert(vec![sender_id.clone()]);
+   209     |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try this: `or_insert_with(|| vec![sender_id.clone()])`
+   210     |
+   211     = note: `#[warn(clippy::or_fun_call)]` on by default
+   212     = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#or_fun_call
+   213 
+   214 warning: you should consider adding a `Default` implementation for `Plugin`
+   215   --> src/lib/plugin.rs:39:5
+   216    |
+   217 39 | /     pub fn new() -> Self {
+   218 40 | |         let plugin_hashmap = HashMap::<String, Box<PluginFunc>>::new();
+   219 41 | |         let mut plugin_obj = Plugin {
+   220 42 | |             plugins: plugin_hashmap,
+   221 ...  |
+   222 49 | |         plugin_obj
+   223 50 | |     }
+   224    | |_____^
+   225    |
+   226    = note: `#[warn(clippy::new_without_default)]` on by default
+   227    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#new_without_default
+   228 help: try adding this
+   229    |
+   230 20 + impl Default for Plugin {
+   231 21 +     fn default() -> Self {
+   232 22 +         Self::new()
+   233 23 +     }
+   234 24 + }
+   235    |
+   236 
+   237 warning: unneeded `return` statement
+   238   --> src/lib/plugin.rs:56:13
+   239    |
+   240 56 |             return true;
+   241    |             ^^^^^^^^^^^^ help: remove `return`: `true`
+   242    |
+   243    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_return
+   244 
+   245 warning: unneeded `return` statement
+   246   --> src/lib/plugin.rs:58:13
+   247    |
+   248 58 |             return false;
+   249    |             ^^^^^^^^^^^^^ help: remove `return`: `false`
+   250    |
+   251    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_return
+   252 
+   253 warning: redundant pattern matching, consider using `is_some()`
+   254   --> src/lib/plugin.rs:55:16
+   255    |
+   256 55 |         if let Some(_) = x {
+   257    |         -------^^^^^^^---- help: try this: `if x.is_some()`
+   258    |
+   259    = note: `#[warn(clippy::redundant_pattern_matching)]` on by default
+   260    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_pattern_matching
+   261 
+   262 warning: `iris` (lib) generated 12 warnings
+   263 warning: redundant clone
+   264   --> src/main.rs:43:36
+   265    |
+   266 43 |         let mut channels = channels.clone();
+   267    |                                    ^^^^^^^^ help: remove this
+   268    |
+   269    = note: `#[warn(clippy::redundant_clone)]` on by default
+   270 note: this value is dropped without further use
+   271   --> src/main.rs:43:28
+   272    |
+   273 43 |         let mut channels = channels.clone();
+   274    |                            ^^^^^^^^
+   275    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_clone
+   276 
+   277 warning: `iris` (bin "iris") generated 1 warning
+   278     Finished dev [unoptimized + debuginfo] target(s) in 2.67s
+   279 === fmt ===
+   280 Diff in /home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris/src/lib/connect.rs at line 1:
+   281  use std::{
+   282 [32m+    error::Error,
+   283 [m[32m+    fmt::{Debug, Display},
+   284 [m     io::{Read, Write},
+   285 [31m-    net::{IpAddr, SocketAddr, TcpListener, TcpStream}, error::Error, fmt::{Display, Debug},
+   286 [m[32m+    net::{IpAddr, SocketAddr, TcpListener, TcpStream},
+   287 [m };
+   288  
+   289  pub struct ConnectionManager {
+   290 Diff in /home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris/src/lib/connect.rs at line 28:
+   291                                  continue;
+   292                              }
+   293                          },
+   294 [31m-                        socket
+   295 [m[32m+                        socket,
+   296 [m                     );
+   297  
+   298                      return (
+   299 Diff in /home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris/src/lib/connect.rs at line 35:
+   300                          ConnectionRead::from_socket(socket_read, addr),
+   301 [31m-                        ConnectionWrite::from_socket(socket_write, addr)
+   302 [m[32m+                        ConnectionWrite::from_socket(socket_write, addr),
+   303 [m                     );
+   304                  }
+   305                  Err(err) => {
+   306 Diff in /home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris/src/lib/connect.rs at line 107:
+   307                      }
+   308                  };
+   309              };
+   310 [31m-    
+   311 [m[32m+
+   312 [m             self.buflen += n_bytes;
+   313          }
+   314  
+   315 Diff in /home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris/src/lib/connect.rs at line 114:
+   316 [31m-        let end = self.buffer_crlf()
+   317 [m[31m-            .ok_or_else(|| {
+   318 [m[31m-                // Clear out their data...
+   319 [m[31m-                self.buflen = 0;
+   320 [m[31m-                ConnectionError::MessageTooLong
+   321 [m[31m-            })?;
+   322 [m[32m+        let end = self.buffer_crlf().ok_or_else(|| {
+   323 [m[32m+            // Clear out their data...
+   324 [m[32m+            self.buflen = 0;
+   325 [m[32m+            ConnectionError::MessageTooLong
+   326 [m[32m+        })?;
+   327 [m 
+   328          let bytes = Vec::from(&self.buffer[0..end]);
+   329  
+   330 Diff in /home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris/src/lib/mod.rs at line 1:
+   331  pub mod connect;
+   332 [31m-pub mod types;
+   333 [m pub mod handler;
+   334 [31m-pub mod user;
+   335 [m pub mod plugin;
+   336 [32m+pub mod types;
+   337 [m[32m+pub mod user;
+   338 [m[32m+
+   339 [mDiff in /home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris/src/lib/types.rs at line 250:
+   340          Ok(PrivMsg {
+   341              target: Target::from(value.get(1).ok_or(ErrorType::NoRecipient)?.to_string()),
+   342              // skip(2) here skips the PRIVMSG instruction and target.
+   343 [31m-            message: value.into_iter().skip(2).last().ok_or(ErrorType::NoTextToSend)?,
+   344 [m[32m+            message: value
+   345 [m[32m+                .into_iter()
+   346 [m[32m+                .skip(2)
+   347 [m[32m+                .last()
+   348 [m[32m+                .ok_or(ErrorType::NoTextToSend)?,
+   349 [m         })
+   350      }
+   351  }
+   352 Diff in /home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris/src/lib/types.rs at line 310:
+   353          let message = match command[0].as_str() {
+   354              "PING" => Ok(Message::Ping(
+   355                  // Skip here ignores the "PING".
+   356 [31m-                command.iter().skip(1).last().ok_or(ErrorType::NoOrigin)?.to_string(),
+   357 [m[32m+                command
+   358 [m[32m+                    .iter()
+   359 [m[32m+                    .skip(1)
+   360 [m[32m+                    .last()
+   361 [m[32m+                    .ok_or(ErrorType::NoOrigin)?
+   362 [m[32m+                    .to_string(),
+   363 [m             )),
+   364              "PRIVMSG" => Ok(Message::PrivMsg(PrivMsg::try_from(command)?)),
+   365              "USER" => Ok(Message::User(UserMsg::try_from(command)?)),
+   366 Diff in /home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris/src/lib/user.rs at line 9:
+   367      conn_write: ConnectionWrite,
+   368      registered: bool,
+   369      quited: bool,
+   370 [31m-    joined_channel: Vec<String>
+   371 [m[32m+    joined_channel: Vec<String>,
+   372 [m }
+   373  
+   374  impl User {
+   375 Diff in /home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris/src/lib/user.rs at line 21:
+   376              conn_write,
+   377              registered: false,
+   378              quited: false,
+   379 [31m-            joined_channel: Vec::<String>::new()
+   380 [m[32m+            joined_channel: Vec::<String>::new(),
+   381 [m         }
+   382      }
+   383  
+   384 Diff in /home/tfpk/code/UNSW/6991_tutor/marking/assign02/5098168/iris/src/lib/user.rs at line 77:
+   385          &mut self.joined_channel
+   386      }
+   387  }
+   388 [32m+
+   389 [m
+   390 
+```
+hash: 9851264261f7c389ebf7606f68a6d5c890908facf0773bf682b291c104f6a89b
+# code_comments
+```
+     1  ==================================================== 
+     2  =                  Code Comments                   = 
+     3  ==================================================== 
+     4 diff --git a/iris/src/lib/handler.rs b/iris/src/lib/handler.rs
+     5 index f476732..8e8bfb6 100644
+     6 --- a/iris/src/lib/handler.rs
+     7 +++ b/iris/src/lib/handler.rs
+     8 @@ -59,7 +59,6 @@ fn nick_msg_handler(
+     9  ) -> Result<(), ErrorType> {
+    10      let mut users = users.as_ref().lock().unwrap();
+    11      // Check if there is same nick name
+    12 -    //>> Consider using if let here next time
+    13      match users
+    14          .iter()
+    15          .find(|usr| usr.get_nick_name() == Some(nickmsg.nick.0.clone()))
+    16 diff --git a/iris/src/lib/plugin.rs b/iris/src/lib/plugin.rs
+    17 index 8fdd484..6d9adf5 100644
+    18 --- a/iris/src/lib/plugin.rs
+    19 +++ b/iris/src/lib/plugin.rs
+    20 @@ -52,7 +52,6 @@ impl Plugin {
+    21      /// Check if the receiver name is a plugin name.
+    22      pub fn is_a_plugin(&self, receiver_name: &String) -> bool {
+    23          let x = self.plugins.get(receiver_name);
+    24 -        //>> You could collapse this to x.is_some() :)
+    25          if let Some(_) = x {
+    26              return true;
+    27          } else {
+    28 @@ -85,8 +84,6 @@ impl Plugin {
+    29  /// Remind the user of something for every 60 seconds. The reminding message is the input message.
+    30  ///
+    31  /// In this case the receiver and the sender are the same person.
+    32 -//>> I could not find this example in the documentation because it is not marked as public 😔
+    33 -//>> You could also consider including this in your module level documentation so that users do not have to check your source code to see an example of how to use your system.
+    34  fn reminder_plug_in(
+    35      users: Arc<Mutex<Vec<User>>>,
+    36      _channels: Arc<Mutex<HashMap<String, Vec<String>>>>,
+    37 diff --git a/iris/src/main.rs b/iris/src/main.rs
+    38 index a250e45..e6596a1 100644
+    39 --- a/iris/src/main.rs
+    40 +++ b/iris/src/main.rs
+    41 @@ -37,13 +37,10 @@ fn main() {
+    42      // Channel to pass reply or error between threads
+    43      let (sender, receiver) = sync::mpsc::channel::<(ParsedMessage, String)>();
+    44  
+    45 -    //>> Consider splitting the scope below and the main listening thread loop
+    46 -    //>> into their own functions next time.
+    47 -
+    48      // Reply thread
+    49      {
+    50          let mut users = users.clone();
+    51 -        let mut channels = channels;
+    52 +        let mut channels = channels.clone();
+    53          std::thread::spawn(move || {
+    54              loop {
+    55                  match receiver.recv() {
+    56 
+```
+hash: 020524d92063a694b8e82e36e11f94e16103b05fd12769eece3d39dd886a5f65
+
+# Marks
+## mechanical_style (5.0 / 10)
+
+Marked by cs6991 at 2022-12-12 18:06:10.396934
+
+## functional_correctness (40.0 / 40)
+
+Marked by cs6991 at 2022-12-12 18:06:10.396934
+
+## idiomatic_design (46.0 / 50)
+
+Marked by cs6991 at 2022-12-12 18:06:10.396934
+
+
+# Final Marks
+
+| Mark Name                                                    | Mark                           |
+| ------------------------------------------------------------ | ------------------------------ |
+| mechanical_style                                             | 5.0/10                         |
+| functional_correctness                                       | 40.0/40                        |
+| idiomatic_design                                             | 46.0/50                        |
+| ------------------------------------------------------------ | ------------------------------ |
+| Mark Before Adjustment                                       | 91.00/100                      |
+| Mark reduced by 9.581800000000000594457816320 marks.         | ------------------------------ |
+| Final Mark                                                   | 81.42/100                      |

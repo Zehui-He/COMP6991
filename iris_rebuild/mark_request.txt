@@ -38,18 +38,19 @@ Lines starting with ">" are additional comments.)
 
 [X] My design never stores messages, and deletes users as soon as they have left the server.
 
-[ ] It is possible to set reminders, using the following command (change this if you'd like)
-> PRIVMSG remindbot :10s tfpk :Remind me of something.
+[X] It is possible to set reminders, using the following command (change this if you'd like)
+> PRIVMSG reminder : 10:Remind me of something.
+> The plugin is able to throw error if invalid parameters are given. For example: PRIVMSG reminder : -10:Hello world
 
-[ ] I have provided an "example" plugin, which explains how somebody
-    else can interface with my plugin system.
+[X] I have provided an "example" plugin, which explains how somebody else can interface with my plugin system.
 
 ## Design Excellence
 
 During the assignment we make suggestions for "design excellence". Please list all those
 things you did, and where we can find them in your program.
 
-> - TODO
+> Isolation and abstraction of APIs. In my User struct design, to ensure that the user of the API won't accidently modify or move the value from the User objects.
+This can also be found in my handler module, where function that used for processing different messages are abstracted away.
 
 If you made any other design choices you think demonstrate an equivalent level
 of design excellence, please list them below (including where to find them).

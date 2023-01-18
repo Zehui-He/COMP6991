@@ -1,3 +1,6 @@
+//! Defines the struct of a user in the IRC server. The UserPool struct
+//! is used for representing all users. 
+
 use std::{
     fmt::Debug,
     sync::{Arc, RwLock, RwLockWriteGuard},
@@ -12,6 +15,7 @@ pub enum UserPoolErrorType {
     UserNotExist,
 }
 
+/// Struct of a user in the IRC server.
 pub struct User {
     id: String,
     nick: Option<String>,
@@ -115,6 +119,7 @@ impl User {
     }
 }
 
+/// Struct that represent all users in the IRC server. 
 pub struct UserPool {
     users: Arc<RwLock<Vec<User>>>,
 }

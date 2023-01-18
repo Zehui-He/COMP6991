@@ -15,7 +15,8 @@ pub enum ErrorType {
     // Self-define errors
     UserNotRegistered = 400,
     UserNotJoinChannel = 433,
-    UserAlreadyInChannel = 434
+    UserAlreadyInChannel = 434,
+    InvalidPluginCommand = 435,
 }
 
 /// This is the name of your server, all messages originating from
@@ -64,6 +65,9 @@ impl std::fmt::Display for ErrorType {
             },
             ErrorType::UserAlreadyInChannel => {
                 write!(fmt, ":{SERVER_NAME} 434 :User is already in channel")
+            },
+            ErrorType::InvalidPluginCommand => {
+                write!(fmt, ":{SERVER_NAME} 435 :Invalid plugin command")
             }
         }
     }

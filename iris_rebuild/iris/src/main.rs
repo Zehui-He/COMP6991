@@ -1,9 +1,10 @@
 use clap::Parser;
 use iris_lib::{
+    channel::ChannelPool,
     connect::{ConnectionError, ConnectionManager},
     handler::{error_message_handler, parsed_message_handler},
-    types::{ErrorType, Nick, ParsedMessage, UnparsedMessage, SERVER_NAME, Message},
-    user::{User, UserPool}, channel::ChannelPool,
+    types::{ErrorType, Message, Nick, ParsedMessage, UnparsedMessage, SERVER_NAME},
+    user::{User, UserPool}, plugin_handler::PluginStruct,
 };
 use std::net::IpAddr;
 
@@ -31,6 +32,8 @@ fn main() {
     // Create a thread for sending message
     {
         let mut user_pool = user_pool.clone();
+        let plugin_handler = PluginStruct::new();
+
         std::thread::spawn(move || {
             let mut channel_pool = ChannelPool::new();
 
@@ -38,7 +41,8 @@ fn main() {
                 match recv {
                     Ok(parsed_msg) => {
                         let sender_nick = parsed_msg.sender_nick.clone();
-                        match parsed_message_handler(&mut user_pool, &mut channel_pool, parsed_msg) {
+                        match parsed_message_handler(&mut user_pool, &mut channel_pool, parsed_msg, &plugin_handler)
+                        {
                             Ok(_) => println!("Send back a message."),
                             Err(err) => {
                                 error_message_handler(&mut user_pool, err, sender_nick);
@@ -113,7 +117,7 @@ fn main() {
                     };
 
                     println!("{:?}", parsed_msg);
-                    
+
                     // Break the loop if the user send a quit message
                     match parsed_msg.message {
                         Message::Quit(_) => user_quited = true,
@@ -122,7 +126,6 @@ fn main() {
 
                     // Send the parsed messgae to the sending thread
                     sender.send(Ok(parsed_msg)).unwrap();
-
                 }
             });
         }
