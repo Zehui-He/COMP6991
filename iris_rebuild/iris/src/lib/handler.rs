@@ -55,7 +55,7 @@ fn nick_msg_handler(
     nick_msg: NickMsg,
     sender_nick: Nick,
 ) -> Result<(), ErrorType> {
-    let nick_str = nick_msg.nick.0;
+    let nick_str = nick_msg.nick.unwrap();
 
     // If the nick name is already in used
     if user_pool.nick_exist(nick_str.clone()) {
@@ -67,7 +67,7 @@ fn nick_msg_handler(
     let mut users = user_pool.get_write_pool();
     let user = users
         .iter_mut()
-        .find(|user| user.get_id() == sender_nick.0)
+        .find(|user| user.get_id() == sender_nick.unwrap())
         .unwrap();
 
     // If the nick name of the user is not set, set the nick name
@@ -162,7 +162,7 @@ fn priv_msg_handler(
         Target::Channel(channel_obj) => {
             let mut users = user_pool.get_write_pool();
 
-            let channel_name = channel_obj.0;
+            let channel_name = channel_obj.unwrap();
 
             // If the channel doesn't exist, throw error
             if !channel_pool.channel_exist(&channel_name) {
@@ -238,7 +238,7 @@ fn join_msg_handler(
         return Err(ErrorType::UserNotRegistered);
     }
 
-    let channel_name = join_msg.channel.0;
+    let channel_name = join_msg.channel.unwrap();
 
     // Throw error if the user is already in channel
     if channel_pool.user_in_channel(&channel_name, sender_nick.clone()) {
@@ -285,7 +285,7 @@ fn part_msg_handler(
         return Err(ErrorType::UserNotRegistered);
     }
 
-    let channel_name = part_msg.channel.0;
+    let channel_name = part_msg.channel.unwrap();
 
     // Throw error if the channel not exist
     if !channel_pool.channel_exist(&channel_name) {

@@ -147,6 +147,12 @@ impl std::fmt::Display for Nick {
     }
 }
 
+impl Nick {
+    pub fn unwrap(&self) -> String {
+        self.0.clone()
+    }
+}
+
 /// An IRC channel.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Channel(pub String);
@@ -170,6 +176,12 @@ impl TryFrom<String> for Channel {
 impl std::fmt::Display for Channel {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
         self.0.fmt(fmt)
+    }
+}
+
+impl Channel {
+    pub fn unwrap(&self) -> String {
+        self.0.clone()
     }
 }
 

@@ -42,7 +42,7 @@ impl ChannelPool {
 
         // Push the user into the channel
         let channel = self.get_channel(&channel_name).unwrap();
-        channel.push(user_nick.0)
+        channel.push(user_nick.unwrap())
     }
 
     pub fn user_in_channel(&mut self, channel_name: &String, user_nick: Nick) -> bool {
@@ -53,7 +53,7 @@ impl ChannelPool {
 
         // Find if the use in the channel
         let channel = self.get_channel(channel_name).unwrap();
-        match channel.iter().find(|x| x == &&user_nick.0) {
+        match channel.iter().find(|x| x == &&user_nick.unwrap()) {
             Some(_) => return true,
             None => return false,
         }
@@ -61,12 +61,12 @@ impl ChannelPool {
 
     pub fn quit_channel(&mut self, channel_name: &String, user_nick: Nick) {
         let channel = self.get_channel(channel_name).unwrap();
-        channel.retain(|x| x != &user_nick.0);
+        channel.retain(|x| x != &user_nick.unwrap());
     }
 
     pub fn remove_user(&mut self, user_nick: Nick) {
         for (_, channel) in self.channel_hashmap.iter_mut() {
-            channel.retain(|x| x != &user_nick.0);
+            channel.retain(|x| x != &user_nick.unwrap());
         }
     }
 }
